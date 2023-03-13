@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19)
 
-project(SHTEINER_TREE LANGUAGES CXX)
+project(LAYOUT_IDENTIFICATION_TOOL LANGUAGES CXX)
 
 #enable_testing()
 set(CMAKE_CXX_STANDARD 20)
@@ -17,7 +17,7 @@ set(OUTPUT_RELEASE_DIR "{CMAKE_CURRENT_LIST_DIR}/Release")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
-# Окружение
+#env
 
 find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
 find_package(Boost REQUIRED)
@@ -29,3 +29,5 @@ include(DoxygenModule)
 generate_doxygen(${PROJECT_DIR})
 
 set(SHARED_DIRS "${CMAKE_CURRENT_LIST_DIR}")
+
+add_subdirectory(src)
