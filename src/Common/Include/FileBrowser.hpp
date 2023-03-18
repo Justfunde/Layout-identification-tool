@@ -92,6 +92,14 @@ class FileBrowser: public QWidget
         QStringView FileType,
         const QStringList& FileExt);
 
+    void
+    SetLabel(
+        const QString& BrowserLabel);
+
+    void
+    SetPath(
+        const QString& Path);
+
     signals:
 
     void
