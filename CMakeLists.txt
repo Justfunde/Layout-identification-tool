@@ -28,6 +28,6 @@ include(DoxygenModule)
 
 generate_doxygen(${PROJECT_DIR})
 
-set(SHARED_DIRS "${CMAKE_CURRENT_LIST_DIR}")
+set(SHARED_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}")
 
 add_subdirectory(src)
