@@ -1,4 +1,4 @@
-#include "Includes/SettingsDialog.hpp"
+#include "Headers/SettingsDialog.hpp"
 
 #include <QToolBar>
 
@@ -12,6 +12,7 @@ namespace SettingParameters
     namespace ToolBarStrings
     {
         const QString pageNames[SettingsDialog::SettingPageId::cnt] = { 
+            "Общее"
             "Алгоритм анализа имен ячеек",
             "Алгоритм сравнения площадей ячеек",
             "Алгоритм анализа числа полигонов и распределения точек в ячейках",

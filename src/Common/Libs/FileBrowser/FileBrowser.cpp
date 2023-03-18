@@ -74,6 +74,14 @@ FileBrowser::SetFilter(
     filter = std::move(resFilter);
 }
 
+void
+FileBrowser::SetLabel(
+    const QString& BrowserLabel)
+{
+    if(BrowserLabel.isEmpty()) { return;}
+    label->setText(BrowserLabel);
+}
+
 
 inline
 void

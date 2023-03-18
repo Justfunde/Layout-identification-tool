@@ -5,6 +5,8 @@
 #include <QWidget>
 #include <QStackedWidget>
 
+#include "SettingsPages.hpp"
+
 //#include "ISettingsPageWidget.hpp"
 
 class SettingsDialog : public QDialog
@@ -14,7 +16,8 @@ class SettingsDialog : public QDialog
     public:
     enum SettingPageId
     {
-        nameAnalysis = 0,
+        common = 0,
+        nameAnalysis,
         squareAnalysis,
         polyCntAnalysis,
         mutualControlAnalysis,
@@ -23,11 +26,9 @@ class SettingsDialog : public QDialog
         cnt
     };
 
-
     private:
     QStackedWidget* settingPages;
 
-    
     public:
 
     explicit SettingsDialog(QWidget* Parent = nullptr) {}
