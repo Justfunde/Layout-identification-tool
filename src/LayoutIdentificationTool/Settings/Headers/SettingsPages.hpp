@@ -2,7 +2,7 @@
 #define __SETTINGS_PAGES_H__
 
 #include "ISettingsPageWidget.hpp"
-#include "Include/FileBrowser.hpp"
+#include "Common/FileBrowser/FileBrowser.hpp"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -45,7 +45,7 @@ class CommonPage : public ISettingPageWidget
 };
 
 
-class NameAnalysisPage : public ISettingPageWidget
+/*class NameAnalysisPage : public ISettingPageWidget
 {
     Q_OBJECT
 
@@ -174,7 +174,7 @@ class BitmapZondingPage : public ISettingPageWidget
 
     private:
 
-};
+};*/
 
 
 #endif //!__SETTINGS_PAGES_H__

@@ -1,7 +1,7 @@
 #include <QHBoxLayout>
 #include <QFileDialog>
 
-#include "Include/FileBrowser.hpp"
+#include "FileBrowser.hpp"
 
 FileBrowser::FileBrowser(
     Mode BrowserMode,
@@ -9,6 +9,8 @@ FileBrowser::FileBrowser(
     : QWidget(Parent)
     , currentMode(BrowserMode)
     , filterValidator("\\.[\\w\\d]{1,10}", QRegularExpression::PatternOption::CaseInsensitiveOption)
+    , dirPathValidator("((?:[^/]*/)*)(.*)", QRegularExpression::PatternOption::CaseInsensitiveOption)
+    , filePathValidator("/^[\\w+\\/]+$/", QRegularExpression::PatternOption::CaseInsensitiveOption)
     , label( new QLabel)
     , pathCb( new QComboBox)
     , browseBtn( new QPushButton("Выбрать"))
@@ -104,6 +106,33 @@ FileBrowser::SetMode(
         }
         default: break;
     }
+}
+
+void
+FileBrowser::SetPathHistory(
+    const QStringList PathHistory)
+{
+    QRegularExpression& currRegex = (Mode::dir == currentMode) ? dirPathValidator : filePathValidator;
+
+    for(QStringList::const_iterator iter = PathHistory.constBegin(); PathHistory.end() != iter; ++iter)
+    {
+        if(!currRegex.match(*iter).hasMatch())
+        {
+            return;
+        }
+    }
+    pathCb->addItems(PathHistory);
+}
+
+
+void
+FileBrowser::SetPath(
+    const QString& Path)
+{
+    QRegularExpression& currRegex = (Mode::dir == currentMode) ? dirPathValidator : filePathValidator;
+    if(!currRegex.match(Path).hasMatch()) { return;}
+    pathCb->addItem(Path);
+    pathCb->setCurrentText(Path);
 }
 
 

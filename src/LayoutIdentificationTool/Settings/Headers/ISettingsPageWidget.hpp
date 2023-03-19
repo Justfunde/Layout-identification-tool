@@ -9,7 +9,8 @@ class ISettingPageWidget : public QWidget
 
     public:
 
-    explicit ISettingPageWidget(QWidget* Parent = nullptr);
+    explicit ISettingPageWidget(QWidget* Parent = nullptr) : QWidget(Parent) {}
+
 
     signals:
 

@@ -24,7 +24,13 @@
  */
 class FileBrowser: public QWidget
 {
-    private:
+    Q_OBJECT
+    public:
+    signals:
+
+    void
+    PathChanged(
+        const QString& NewPath);
 
     public:
 
@@ -33,7 +39,7 @@ class FileBrowser: public QWidget
     {
         fSave, ///< Save file mode
         fLoad, ///< Load file mode
-        dir    ///< 
+        dir    ///< Dir mode
     };
 
     /**
@@ -64,7 +70,7 @@ class FileBrowser: public QWidget
     GetMode() const;
 
     /**
-     * @brief Get t
+     * @brief Get filter
      * 
      * @return const QString& 
      */
@@ -92,19 +98,35 @@ class FileBrowser: public QWidget
         QStringView FileType,
         const QStringList& FileExt);
 
+    /**
+     * @brief Set label of browser
+     * 
+     * @param BrowserLabel 
+     */
     void
     SetLabel(
         const QString& BrowserLabel);
 
+    /**
+     * @brief Set current path
+     * 
+     * @param Path 
+     */
     void
     SetPath(
         const QString& Path);
 
-    signals:
-
+    /**
+     * @brief Set path history
+     * 
+     * @param PathHistory 
+     */
     void
-    PathChanged(
-        const QString&);
+    SetPathHistory(
+        const QStringList PathHistory);
+
+
+
 
     private slots:
 
@@ -119,6 +141,8 @@ class FileBrowser: public QWidget
     Mode         currentMode;
     QString      filter;
     QRegularExpression filterValidator;
+    QRegularExpression dirPathValidator;
+    QRegularExpression filePathValidator;
 
     QLabel*      label;
     QComboBox*   pathCb;

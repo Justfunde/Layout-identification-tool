@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QWidget>
 #include <QStackedWidget>
+#include <QToolBar>
 
 #include "SettingsPages.hpp"
 
@@ -27,11 +28,27 @@ class SettingsDialog : public QDialog
     };
 
     private:
+    SettingPageId currentPage;
+    QToolBar*       tb;
     QStackedWidget* settingPages;
 
     public:
 
-    explicit SettingsDialog(QWidget* Parent = nullptr) {}
+    explicit
+    SettingsDialog(
+        QWidget* Parent = nullptr)
+        : QDialog(Parent)
+        , tb(new QToolBar)
+        , settingPages(new QStackedWidget) 
+        {
+            QVBoxLayout* mainLayout = new QVBoxLayout(this);
+            tb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+            settingPages->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+            Init();
+            mainLayout->addWidget(tb);
+            mainLayout->addWidget(settingPages);
+        }
 
     signals:
 

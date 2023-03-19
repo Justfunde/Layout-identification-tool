@@ -1,9 +1,10 @@
-#include "MainWindow.hpp"
-
 #include <QMenu>
 #include <QMenuBar>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+
+#include "MainWindow.hpp"
+#include "Settings/Headers/SettingsDialog.hpp"
 
 MainWindow::MainWindow(
     QWidget* Parent)
@@ -47,6 +48,6 @@ MainWindow::CreateMenu()
 void
 MainWindow::OpenSettings()
 {
-    int i = 0;
-    ++i;
+    SettingsDialog dial;
+    dial.exec();    
 }
