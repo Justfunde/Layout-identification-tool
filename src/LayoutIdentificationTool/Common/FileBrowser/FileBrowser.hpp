@@ -62,6 +62,14 @@ class FileBrowser: public QWidget
     GetPath() const;
 
     /**
+     * @brief Get the Path History
+     * 
+     * @return QStringList 
+     */
+    QStringList
+    GetPathHistory() const;
+
+    /**
      * @brief Get workmode
      * 
      * @return Mode 
@@ -124,9 +132,6 @@ class FileBrowser: public QWidget
     void
     SetPathHistory(
         const QStringList PathHistory);
-
-
-
 
     private slots:
 

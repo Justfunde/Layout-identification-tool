@@ -1,22 +1,21 @@
 #ifndef __I_SETTINGS_PAGE_WIDGET_H__
 #define __I_SETTINGS_PAGE_WIDGET_H__
 
-#include <QWidget>
+#include <QGroupBox>
 
-class ISettingPageWidget : public QWidget
+class ISettingPageWidget : public QGroupBox
 {
     Q_OBJECT
 
     public:
 
-    explicit ISettingPageWidget(QWidget* Parent = nullptr) : QWidget(Parent) {}
+    explicit ISettingPageWidget(QWidget* Parent = nullptr) : QGroupBox(Parent) {}
 
 
     signals:
 
     void SettingsChanged();
 
-    void Commit();
 
     void CompleteChanges();
 
@@ -25,6 +24,10 @@ class ISettingPageWidget : public QWidget
     virtual
     void
     InitPage() = 0;
+
+    virtual
+    void 
+    Commit() = 0;
 };
 
 

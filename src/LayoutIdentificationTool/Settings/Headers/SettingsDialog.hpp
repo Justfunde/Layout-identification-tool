@@ -8,8 +8,6 @@
 
 #include "SettingsPages.hpp"
 
-//#include "ISettingsPageWidget.hpp"
-
 class SettingsDialog : public QDialog
 {
     Q_OBJECT
@@ -24,7 +22,7 @@ class SettingsDialog : public QDialog
         mutualControlAnalysis,
         bruteForcePolySearch,
         bitmapZonding,
-        cnt
+        cnt = nameAnalysis
     };
 
     private:
@@ -32,36 +30,33 @@ class SettingsDialog : public QDialog
     QToolBar*       tb;
     QStackedWidget* settingPages;
 
+    std::array<ISettingPageWidget*, cnt> pages;
+
     public:
 
     explicit
     SettingsDialog(
-        QWidget* Parent = nullptr)
-        : QDialog(Parent)
-        , tb(new QToolBar)
-        , settingPages(new QStackedWidget) 
-        {
-            QVBoxLayout* mainLayout = new QVBoxLayout(this);
-            tb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-            settingPages->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-            Init();
-            mainLayout->addWidget(tb);
-            mainLayout->addWidget(settingPages);
-        }
+        QWidget* Parent = nullptr);
 
     signals:
 
     void
     SettingsChanged();
 
-    private:
+    private slots:
 
+    void
+    OnApply();
+
+    void
+    OnOk();
+
+    private:
 
     void
     Init();
 
-    std::array<QWidget*, cnt>
+    std::array<ISettingPageWidget*, cnt>
     CreateSettingPagesArray();
 };
 

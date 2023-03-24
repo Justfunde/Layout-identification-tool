@@ -4,6 +4,7 @@
 #include "ISettingsPageWidget.hpp"
 #include "Common/FileBrowser/FileBrowser.hpp"
 
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
@@ -20,32 +21,24 @@ class CommonPage : public ISettingPageWidget
 
     explicit
     CommonPage(
-        QWidget* Parent = nullptr)
-        : ISettingPageWidget(Parent)
-        , fileBrowser(new FileBrowser(FileBrowser::Mode::dir))
-    {
-        fileBrowser->SetLabel("Путь до библиотеки:");
-
-        QVBoxLayout* mainLayout = new QVBoxLayout(this);
-        mainLayout->addWidget(fileBrowser);
-        mainLayout->addSpacerItem(new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Expanding));
-    }
+        QWidget* Parent = nullptr);
 
     public slots:
 
     virtual
     void
-    InitPage() override final
-    {
-        
-    }
+    InitPage() override final;
+
+    virtual
+    void 
+    Commit() override final;
 
     private:
 
 };
 
 
-/*class NameAnalysisPage : public ISettingPageWidget
+class NameAnalysisPage : public ISettingPageWidget
 {
     Q_OBJECT
 
@@ -174,7 +167,7 @@ class BitmapZondingPage : public ISettingPageWidget
 
     private:
 
-};*/
+};
 
 
 #endif //!__SETTINGS_PAGES_H__

@@ -32,11 +32,22 @@ FileBrowser::FileBrowser(
 }
 
 
-inline
 QString
 FileBrowser::GetPath() const
 {
     return pathCb->currentText();
+}
+
+QStringList
+FileBrowser::GetPathHistory() const
+{
+    QStringList ret;
+    for(uint32_t i = 0, currentInd = pathCb->currentIndex(); i < pathCb->count(); ++i)
+    {
+        if(i == currentInd) { continue;}
+        ret.push_back(pathCb->itemText(i));
+    }
+    return ret;
 }
 
 
