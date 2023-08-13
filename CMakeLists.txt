@@ -27,7 +27,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 include(DoxygenModule)
 
-generate_doxygen(${PROJECT_DIR})
+#generate_doxygen(${PROJECT_DIR})
 
 set(SHARED_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}")
 
