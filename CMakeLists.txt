@@ -20,7 +20,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 #env
 
-find_package(Qt6 COMPONENTS Core Gui Widgets REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Widgets Sql REQUIRED)
 find_package(Boost REQUIRED)
 
 include_directories(${Boost_INCLUDE_DIRS})
@@ -29,6 +29,5 @@ include(DoxygenModule)
 
 #generate_doxygen(${PROJECT_DIR})
 
-set(SHARED_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}")
 
 add_subdirectory(src)
