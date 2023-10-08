@@ -1,1 +1,3 @@
+add_subdirectory(FileMetadataParser)
+
 add_subdirectory(LayoutReader)
