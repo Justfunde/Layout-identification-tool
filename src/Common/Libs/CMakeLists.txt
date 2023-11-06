@@ -1,3 +1,3 @@
 add_subdirectory(FileMetadataParser)
-
+add_subdirectory(GeometrySignature)
 add_subdirectory(LayoutReader)
