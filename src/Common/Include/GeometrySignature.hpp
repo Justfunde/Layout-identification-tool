@@ -20,6 +20,13 @@ class GeometrySignature
 
    GeometrySignature& operator=(GeometrySignature&& Sig) noexcept;
 
+   bool
+   FindEntry(
+      const GeometrySignature& Signature,
+      bool SupportRotations = true,
+      bool SupportShift = true);
+
+   bool operator!() const { return sig.empty();}
 
    operator std::string() const {return sig;}
 
@@ -33,6 +40,16 @@ class GeometrySignature
 
    char
    GetHdr(lds::Geometry* Geom) const;
+
+   std::string
+   LCSk(
+      const std::string& Str1,
+      const std::string& Str2);
+
+   std::string
+   CompareWithLCSk(
+      const std::string& Str1,
+      const std::string& Str2);
 
 
    private:

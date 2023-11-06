@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <exception>
 
 #include "Include/GeometrySignature.hpp"
@@ -87,4 +88,65 @@ GeometrySignature::CreateSignature(lds::Geometry* Geom) const
       }
    ret.shrink_to_fit();
    return ret;
+}
+
+
+
+std::string
+GeometrySignature::LCSk(
+   const std::string& Str1,
+   const std::string& Str2)
+{
+   const std::size_t rowCnt = Str1.size();
+   const std::size_t colCnt = Str2.size();
+
+   std::vector<std::vector<std::size_t>> dp(rowCnt + 1, std::vector<std::size_t>(colCnt + 1));
+   std::size_t maxLength = 0;  // Максимальная длина общей подстроки
+   std::size_t endIndex = 0;   // Конечный индекс общей подстроки в str1
+
+   for (std::size_t i = 1; i <= rowCnt; i++)
+   {
+      for (std::size_t j = 1; j <= colCnt; j++)
+      {
+         if (Str1[i - 1] == Str2[j - 1])
+         {
+            dp[i][j] = dp[i - 1][j - 1] + 1;
+            if (dp[i][j] > maxLength)
+            {
+               maxLength = dp[i][j];
+               endIndex = i;
+            }
+            } else { dp[i][j] = 0;} // Сброс, так как LCSk ищет непрерывные последовательности
+        }
+    }
+
+    // Восстановление наибольшей общей подстроки из таблицы dp
+    std::string lcsk = Str1.substr(endIndex - maxLength, maxLength);
+    return lcsk;
+
+}
+
+
+std::string
+GeometrySignature::CompareWithLCSk(
+   const std::string& Str1,
+   const std::string& Str2)
+{
+   if(Str1 == Str2) { return Str1;}
+
+   std::string bestMatch;
+   const std::string strToShift = (Str1.size() < Str2.size()) ? Str1 : Str2;
+   const std::string sourceStr = (Str1.size() < Str2.size()) ? Str2 : Str1;
+
+   for(std::size_t shift = 0; shift < strToShift.size(); ++shift)
+   {
+      std::string shiftedStr = strToShift.substr(shift) + strToShift.substr(0, shift);
+
+      std::string currentMatch = LCSk(sourceStr, shiftedStr);
+      if(currentMatch.size() > bestMatch.size())
+      {
+         bestMatch = std::move(currentMatch);
+      }
+   }
+   return bestMatch;
 }
