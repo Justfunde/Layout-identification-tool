@@ -93,7 +93,7 @@ GeometrySignature::CreateSignature(lds::Geometry* Geom) const
 
 
 std::string
-GeometrySignature::LCSk(
+LCSAlgorithm::LCSk(
    const std::string& Str1,
    const std::string& Str2)
 {
@@ -128,7 +128,7 @@ GeometrySignature::LCSk(
 
 
 std::string
-GeometrySignature::CompareWithLCSk(
+LCSAlgorithm::CompareWithLCSkShifting(
    const std::string& Str1,
    const std::string& Str2)
 {

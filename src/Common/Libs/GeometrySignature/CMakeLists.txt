@@ -1,2 +1,2 @@
 add_subdirectory(Impl)
-# add_subdirectory(Test)
+add_subdirectory(Test)

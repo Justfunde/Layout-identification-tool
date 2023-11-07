@@ -6,6 +6,23 @@
 
 #include "Include/LayoutData.hpp"
 
+class LCSAlgorithm
+{
+   public:
+   static
+   std::string
+   LCSk(
+      const std::string& Str1,
+      const std::string& Str2);
+
+   static
+   std::string
+   CompareWithLCSkShifting(
+      const std::string& Str1,
+      const std::string& Str2);
+};
+
+
 class GeometrySignature
 {
    public:
@@ -41,22 +58,12 @@ class GeometrySignature
    char
    GetHdr(lds::Geometry* Geom) const;
 
-   std::string
-   LCSk(
-      const std::string& Str1,
-      const std::string& Str2);
-
-   std::string
-   CompareWithLCSk(
-      const std::string& Str1,
-      const std::string& Str2);
-
-
    private:
    std::string sig;
+
 };
 
-std::ostream& operator<<(std::ostream& Out, const GeometrySignature& Sig)
+inline std::ostream& operator<<(std::ostream& Out, const GeometrySignature& Sig)
 {
    Out << Sig.ToString();
    return Out;
