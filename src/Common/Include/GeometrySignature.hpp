@@ -37,7 +37,7 @@ class GeometrySignature
 
    GeometrySignature& operator=(GeometrySignature&& Sig) noexcept;
 
-   bool
+   std::string
    FindEntry(
       const GeometrySignature& Signature,
       bool SupportRotations = true,
@@ -50,7 +50,13 @@ class GeometrySignature
    const std::string&
    ToString() const { return sig;}
 
+   void
+   Rotate(std::int32_t Angle);
+
    private:
+
+   char
+   Rotate(char Direction, std::int32_t Angle) const;
 
    std::string
    CreateSignature(lds::Geometry* Geom) const;

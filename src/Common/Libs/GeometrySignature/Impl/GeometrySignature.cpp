@@ -91,7 +91,6 @@ GeometrySignature::CreateSignature(lds::Geometry* Geom) const
 }
 
 
-
 std::string
 LCSAlgorithm::LCSk(
    const std::string& Str1,
@@ -148,5 +147,58 @@ LCSAlgorithm::CompareWithLCSkShifting(
          bestMatch = std::move(currentMatch);
       }
    }
+   return bestMatch;
+}
+
+
+
+void
+GeometrySignature::Rotate(int32_t Angle)
+{
+   if( 0 == Angle) { return;}
+   for(auto& it : sig)
+   {
+      it = Rotate(it, Angle);
+   }
+}
+
+
+char
+GeometrySignature::Rotate(char Direction, std::int32_t Angle) const
+{
+   auto currVal = static_cast<int32_t>(Direction) - '0';
+
+   currVal += 360 / Angle;
+
+   return static_cast<char>(currVal) + '0';
+}
+
+
+std::string
+GeometrySignature::FindEntry(
+   const GeometrySignature& Signature,
+   bool SupportRotations,
+   bool SupportShift)
+{
+   if(!Signature) { throw std::invalid_argument(""); }
+
+   constexpr std::size_t rotationsCnt = 360 / 90; // для ортогональной системы координат
+
+   const std::size_t iterationCnt = (SupportRotations) ? rotationsCnt : 1;
+
+   std::string bestMatch;
+   for(std::size_t i = 0; i < iterationCnt; ++i)
+   {
+      GeometrySignature cmpSig = Signature;
+
+      cmpSig.Rotate(i * 90);
+
+      std::string currentMatch = (SupportShift) ? LCSAlgorithm::CompareWithLCSkShifting(sig, cmpSig) : LCSAlgorithm::LCSk(sig, cmpSig);
+      if(currentMatch.size() > bestMatch.size())
+      {
+         bestMatch = std::move(currentMatch);
+      }
+   }
+
    return bestMatch;
 }
