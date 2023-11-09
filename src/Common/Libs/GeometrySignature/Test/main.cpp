@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include <tuple>
+#include <utility>
 
 #include "Include/GeometrySignature.hpp"
 
@@ -62,6 +63,111 @@ TEST(LCSkTest, LCSk_Shifting_Test)
       EXPECT_EQ(LCSAlgorithm::CompareWithLCSkShifting(sig1, sig2), expected);
    }
 };
+
+TEST(GeometrySignature, GeometrySignatureCreationTest)
+{
+   /*
+      Directions
+      7 0 1
+      6   2
+      5 4 3
+   */
+   //Box
+
+   auto box = std::make_unique<lds::Rectangle>();
+   std::vector<lds::Coord> coords =
+   {
+      {0, 0},
+      {10, 0},
+      {10, 10},
+      {0, 10},
+      {0, 0}
+   };
+   box->coords = std::move(coords);
+
+   const std::string etalonBoxSig = "2064";
+
+   EXPECT_EQ(etalonBoxSig, GeometrySignature(box.get()).ToString());
+
+   auto poly = std::make_unique<lds::Polygon>();
+   coords = {
+    {0, 0},    // Точка 1
+    {10, 0},   // Точка 2, вправо от Точки 1
+    {10, 5},   // Точка 3, вверх от Точки 2
+    {5, 5},    // Точка 4, влево от Точки 3
+    {5, 10},   // Точка 5, вверх от Точки 4
+    {15, 10},  // Точка 6, вправо от Точки 5
+    {15, -5},  // Точка 7, вниз от Точки 6
+    {0, -5},   // Точка 8, влево от Точки 7
+    {0, -10},  // Точка 9, вниз от Точки 8
+    {0, 0},    // Точка 10, вверх до Точки 1 (замыкает полигон)
+};
+poly->coords = std::move(coords);
+
+const std::string etalonPolySig = "206024640";
+
+EXPECT_EQ(etalonPolySig, GeometrySignature(poly.get()).ToString());
+
+};
+
+
+TEST(GeometrySignature, GeometrySignatureComparationTest)
+{
+   /*
+      Directions
+      7 0 1
+      6   2
+      5 4 3
+   */
+   //Box
+
+   auto boxes = std::make_pair(std::make_unique<lds::Rectangle>(),std::make_unique<lds::Rectangle>());
+   boxes.first->coords = {
+      {10, 0},
+      {10, 10},
+      {0, 10},
+      {0, 0},
+      {10, 0}};
+
+   boxes.second->coords = {
+      {0, 0},
+      {10, 0},
+      {10, 10},
+      {0, 10},
+      {0, 0}};
+
+   EXPECT_EQ(GeometrySignature(boxes.first.get()).FindEntry(GeometrySignature(boxes.second.get())).length(), 4);
+
+   auto polygons = std::make_pair(std::make_unique<lds::Rectangle>(),std::make_unique<lds::Rectangle>());
+   polygons.first->coords = {
+      {0, 0},    // Точка 1
+    {10, 0},   // вправо от Точки 1
+    {10, 5},   // вверх от Точки 2
+    {5, 5},    // влево от Точки 3
+    {5, 10},   // вверх от Точки 4
+    {15, 10},  // вправо от Точки 5
+    {15, -5},  // вниз от Точки 6
+    {0, -5},   // влево от Точки 7
+    {0, -10},  // вниз от Точки 8
+    {0, 0}};    //вверх до Точки 1 (замыкает полигон)};
+
+   polygons.second->coords = {
+     {0, 0},    // Начальная точка
+    {0, -10},  // Вниз от Точки 1 к Точке 2
+    {5, -10},  // Вправо от Точки 2 к Точке 3
+    {5, -5},   // Вверх от Точки 3 к Точке 4
+    {10, -5},  // Вправо от Точки 4 к Точке 5
+    {10, -15}, // Вниз от Точки 5 к Точке 6
+    {-5, -15}, // Влево от Точки 6 к Точке 7
+    {-5, 0},   // Вверх от Точки 7 к Точке 8
+    {-10, 0},  // Влево от Точки 8 к Точке 9
+    {0, 0}    // Вверх от Точки 9 к Точке 10 (замыкает полигон)
+   };
+
+   EXPECT_EQ(GeometrySignature(polygons.first.get()).FindEntry(GeometrySignature(polygons.second.get())).length(), 4);
+
+};
+
 
 int main(int argc, char **argv)
 {
