@@ -4,9 +4,11 @@
 #include <QHBoxLayout>
 #include <QListView>
 #include <QFileDialog>
+#include <QFileSystemModel>
 #include <QMessageBox>
 
 #include <QDebug>
+#include <QDir>
 
 #include "LcLayoutPage.hpp"
 #include "Include/LayoutReader.hpp"
@@ -18,32 +20,41 @@ LcLayoutPage::LcLayoutPage(QWidget* Parent)
    , tb(new QToolBar)
    , mainW(new QWidget)
    , splitter(new QSplitter)
-   , layoutNamesView(new QListView())
-   , layoutNamesModel(new QStringListModel)
+   , layoutNamesView(new QTreeView)
    , layoutViewWidget(new LayoutWidget)
+   , layoutFilesPathModel(new QFileSystemModel)
 {
    tb->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
    mainW->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-   layoutNamesView->setModel(layoutNamesModel);
+   const QString path = "/home/justfunde/work/Layout-identification-tool/src/LitClient/Test/LayoutFiles";
+   if(!QDir(path).exists())
+   {
+      return;
+   }
 
-   QStringList nms  = {
-      "/home/justfunde/work/Layout-identification-tool/src/Common/Libs/LayoutReader/Test/MskFiles/dd2.MSK",
-      "/home/justfunde/work/Layout-identification-tool/src/Common/Libs/LayoutReader/Test/MskFiles/4.MSK"
-   };
+   layoutFilesPathModel->setRootPath(path);
 
-   layoutNamesModel->setStringList(nms);
+
+   layoutNamesView->setModel(layoutFilesPathModel);
+   layoutNamesView->setRootIndex(layoutFilesPathModel->index(path));
+   layoutNamesView->hideColumn(1);
+   layoutNamesView->hideColumn(2);
 
 
    splitter->addWidget(layoutNamesView);
    splitter->addWidget(layoutViewWidget);
-   
+   splitter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
    splitter->setSizes({100,500});
+   splitter->setStretchFactor(0, 2);
+   splitter->setStretchFactor(1, 0);
+
 
    QVBoxLayout* mainLayout = new QVBoxLayout(this);
    mainLayout->addWidget(tb);
    mainLayout->addWidget(splitter);
-   mainLayout->addSpacerItem(new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
+   //mainLayout->addSpacerItem(new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
 
    auto act = tb->addAction(QIcon(":imgs/Plus.ico"),"Добавить файл");
 
@@ -55,9 +66,11 @@ LcLayoutPage::LcLayoutPage(QWidget* Parent)
       {
          if(Current.isValid())
          {
-            layoutViewWidget->setFile(Current.data(Qt::DisplayRole).toString().toStdString());
+            if(layoutFilesPathModel->isDir(Current)) {return;}
+            layoutViewWidget->setFile(layoutFilesPathModel->filePath(Current).toStdString());
          }
       });
+
 }
 
 
@@ -103,7 +116,4 @@ LcLayoutPage::ImportLayoutFile(
          "Не удалось проверить корректность файла топологии!\n Файл не будет добавлен в базу данных!");
          return;
    }
-   names.append(Path);
-
-   layoutNamesModel->setStringList(names);
 }

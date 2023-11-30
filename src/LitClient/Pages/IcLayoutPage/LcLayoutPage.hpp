@@ -5,9 +5,8 @@
 #include <QToolBar>
 #include <QSplitter>
 #include <QString>
-
-#include <QListView>
-#include <QStringListModel>
+#include <QFileSystemModel>
+#include <QTreeView>
 
 #include "LayoutWidget/LayoutWidget.hpp"
 
@@ -39,9 +38,8 @@ class LcLayoutPage : public QWidget
    QWidget* mainW;
    QSplitter* splitter;
 
-   QListView* layoutNamesView;
-   QStringListModel* layoutNamesModel;
-   QStringList names;
+   QTreeView* layoutNamesView;
+   QFileSystemModel* layoutFilesPathModel;
 
    LayoutWidget* layoutViewWidget;
 
