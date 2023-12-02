@@ -20,7 +20,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 #env
 
-find_package(Qt6 COMPONENTS Core Gui Widgets Sql REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui Widgets Sql REQUIRED)
 find_package(Boost REQUIRED)
 
 enable_testing()

@@ -41,4 +41,4 @@ set(RESOURCES_DIR ${CMAKE_CURRENT_LIST_DIR}/Resources)
 
 add_executable(${TARGET_NAME} ${SOURCES_LIST} ${HEADERS_LIST} ${RESOURCES_DIR}/resource.qrc)
 target_include_directories(${TARGET_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR} ${SHARED_INCLUDE_DIRS})
-target_link_libraries(${TARGET_NAME} PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui LayoutReader Crc32)
+target_link_libraries(${TARGET_NAME} PRIVATE Qt5::Core Qt5::Widgets Qt5::Gui LayoutReader Crc32)

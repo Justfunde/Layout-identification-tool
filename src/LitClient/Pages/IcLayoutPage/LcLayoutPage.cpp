@@ -1,6 +1,5 @@
 #include <QProcess>
 #include <QStringList>
-#include <QWindow>
 #include <QHBoxLayout>
 #include <QListView>
 #include <QFileDialog>
@@ -11,7 +10,11 @@
 #include <QDir>
 
 #include "LcLayoutPage.hpp"
+
+#include "LayoutCard/LayoutCard.hpp"
+
 #include "Include/LayoutReader.hpp"
+
 
 constexpr std::string_view path = "/home/justfunde/work/Layout-identification-tool/src/Common/Libs/LayoutReader/Test/MskFiles/2LABA.MSK";
 
@@ -40,6 +43,7 @@ LcLayoutPage::LcLayoutPage(QWidget* Parent)
    layoutNamesView->setRootIndex(layoutFilesPathModel->index(path));
    layoutNamesView->hideColumn(1);
    layoutNamesView->hideColumn(2);
+   layoutNamesView->hideColumn(3);
 
 
    splitter->addWidget(layoutNamesView);
@@ -64,13 +68,23 @@ LcLayoutPage::LcLayoutPage(QWidget* Parent)
       &QItemSelectionModel::currentChanged,
       [this](const QModelIndex& Current)
       {
-         if(Current.isValid())
+         if(Current.isValid() && !layoutFilesPathModel->isDir(Current))
          {
-            if(layoutFilesPathModel->isDir(Current)) {return;}
             layoutViewWidget->setFile(layoutFilesPathModel->filePath(Current).toStdString());
          }
       });
-
+   connect(
+      layoutNamesView, 
+      &QTreeView::doubleClicked, 
+      this, 
+      [this](const QModelIndex& Current)
+      {
+         if(Current.isValid() && !layoutFilesPathModel->isDir(Current))
+         {
+            emit AskForCardExec(layoutFilesPathModel->filePath(Current));
+         }
+      });
+   connect(this, &LcLayoutPage::AskForCardExec, this, &LcLayoutPage::ExecCard);
 }
 
 
@@ -116,4 +130,14 @@ LcLayoutPage::ImportLayoutFile(
          "Не удалось проверить корректность файла топологии!\n Файл не будет добавлен в базу данных!");
          return;
    }
+}
+
+void
+LcLayoutPage::ExecCard(const QString& Path)
+{
+   if(Path.isEmpty()) { return;}
+
+   LayoutCard card(Path);
+   card.exec();
+
 }

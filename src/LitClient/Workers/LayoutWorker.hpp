@@ -2,8 +2,9 @@
 #define __LAYOUT_WORKER_H__
 
 #include <QObject>
-
 #include <string>
+
+#include "TokenGenerator.hpp"
 
 class LayoutWorker : public QObject
 {
@@ -15,6 +16,7 @@ class LayoutWorker : public QObject
       Error
    };
 
+   signals:
    void
    CrcReady(uint32_t Token, const QByteArray& Crc32, LayoutWorker::Status Status);
 

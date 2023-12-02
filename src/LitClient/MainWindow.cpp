@@ -8,6 +8,7 @@ MainWindow::MainWindow(
    : QMainWindow(Parent, Flags)
    , tabWidget(new QTabWidget)
 {
+   setMinimumSize(1200, 1000);
    setCentralWidget(tabWidget);
    tabWidget->addTab(new LcLayoutPage, "Топологии");
 }

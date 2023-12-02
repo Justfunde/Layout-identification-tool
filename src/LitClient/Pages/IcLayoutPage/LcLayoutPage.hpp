@@ -15,6 +15,11 @@ class LcLayoutPage : public QWidget
 {
    Q_OBJECT
 
+   signals:
+   void
+   AskForCardExec(const QString& FileName);
+
+
    public:
 
    LcLayoutPage(QWidget* Parent = nullptr);
@@ -32,6 +37,10 @@ class LcLayoutPage : public QWidget
    bool
    IsLayoutFile(
       const QString& Path);
+
+   private slots:
+   void
+   ExecCard(const QString& Path);
 
    private:
    QToolBar* tb;
