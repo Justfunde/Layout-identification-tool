@@ -83,9 +83,9 @@ constexpr uint32_t g_crc32Table[] =
 
 Crc32Hash
 Crc32::CalcHash(
-    const char* Data,
-    uint32_t DataSz)
-{  
+   const char* Data,
+   uint32_t DataSz)
+{
    if(nullptr == Data || 0 == DataSz) { throw std::invalid_argument("Invalid CRC32 argument!");}  
 
    Crc32Hash hash = 0;
@@ -94,7 +94,7 @@ Crc32::CalcHash(
    hash = ~hash;
    while (DataSz--)
    {
-       hash = g_crc32Table[(uint8_t)(hash ^ *(pBuf++))] ^ (hash >> 8);
+      hash = g_crc32Table[(uint8_t)(hash ^ *(pBuf++))] ^ (hash >> 8);
    }
-    return ~hash;
+   return ~hash;
 }

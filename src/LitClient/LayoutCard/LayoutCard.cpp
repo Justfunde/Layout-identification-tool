@@ -14,7 +14,7 @@ LayoutCard::LayoutCard(
     : QDialog(Parent)
     , hashLbl(new QLabel)
     , token(TokenGenerator::GetNewToken())
-    ,fName(Name)
+    , fName(Name)
     , layoutView(new LayoutWidget)
 {
    setWindowTitle("Карточка файла топологии " + Name.mid(Name.lastIndexOf('/') + 1));
