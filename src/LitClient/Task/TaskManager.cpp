@@ -52,10 +52,10 @@ TaskManager::ManagerEventPool()
          tpoolCv.wait(tpoolLock, [this]() { return threadPool.activeThreadCount() < 16 || stopFlag; });   
          if(stopFlag) { return;}
       }
+      threadPool.start(task);
       runningTasks.push_back(task);
    }
 }
-
 
 
 void

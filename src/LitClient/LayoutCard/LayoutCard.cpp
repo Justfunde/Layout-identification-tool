@@ -7,6 +7,8 @@
 #include "Workers/TokenGenerator.hpp"
 #include "LayoutCard.hpp"
 #include "Include/LayoutReader.hpp"
+#include "Task/TaskManager.hpp"
+#include "Task/Tasks.hpp"
 
 LayoutCard::LayoutCard(
     const QString& Name,
@@ -25,6 +27,18 @@ LayoutCard::LayoutCard(
    splitter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
    splitter->addWidget(CreateInfoWidget());
    splitter->addWidget(layoutView);
+
+   connect(
+      this, 
+      &LayoutCard::AskForCrc, 
+      this,
+      [this](Token Token, const QString& FileName, const QString& PathToSave)
+      {
+         auto& inst = TaskManager::Instance();
+         auto task = new Crc32GenTask(Token, FileName);
+         inst.AddTask(task);
+         connect(task, &Crc32GenTask::HashReady, this, [this](const QByteArray& Bytea){ hashLbl->setText(Bytea.toHex());}  );
+      });
 
    emit layoutView->setFile(fName.toStdString());
 
