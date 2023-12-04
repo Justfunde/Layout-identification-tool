@@ -8,23 +8,30 @@
 #include <QWidget>
 
 #include <vector>
+#include <memory>
+
+#include "LayoutWidget/LayoutWidget.hpp"
+#include "Workers/TokenGenerator.hpp"
+
 
 class LayoutCard : public QDialog
 {
    Q_OBJECT
    signals:
    void
-   AskForCrc(uint32_t Token, const QString& FileName, const QString& PathToSave = QString());
+   AskForCrc(Token Token, const QString& FileName, const QString& PathToSave = QString());
 
    void
-   AskForLayoutMatrixGen(uint32_t Token, const QString& FileName);
+   AskForLayoutMatrixGen(Token Token, const QString& FileName);
 
    void
-   AskForGeometrySignaturesGeneration(uint32_t Token, const QString& FileName);
+   AskForGeometrySignaturesGeneration(Token Token, const QString& FileName);
 
    public:
    explicit
    LayoutCard(const QString& Name, QWidget* Parent = nullptr);
+
+
 
    private:
 
@@ -33,9 +40,14 @@ class LayoutCard : public QDialog
 
 
    private:
-   uint32_t token;
+
+   Token token;
    const QString fName;
    QLabel* hashLbl;
+
+
+   //layout view
+   LayoutWidget* layoutView;
 };
 
 

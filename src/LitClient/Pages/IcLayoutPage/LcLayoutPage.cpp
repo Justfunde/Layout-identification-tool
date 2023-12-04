@@ -11,6 +11,7 @@
 
 #include "LcLayoutPage.hpp"
 
+
 #include "LayoutCard/LayoutCard.hpp"
 
 #include "Include/LayoutReader.hpp"
@@ -137,7 +138,8 @@ LcLayoutPage::ExecCard(const QString& Path)
 {
    if(Path.isEmpty()) { return;}
 
-   LayoutCard card(Path);
-   card.exec();
-
+   LayoutCard* card = new LayoutCard(Path);
+   card->setModal(false);
+   card->show();
+   connect(card, &QObject::destroyed, card, &QObject::deleteLater);
 }
