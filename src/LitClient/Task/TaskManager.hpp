@@ -21,6 +21,7 @@ class ITask;
 
 using TaskId = std::size_t;
 
+
 class TaskManager : public QObject
 {
    Q_OBJECT
@@ -43,11 +44,7 @@ class TaskManager : public QObject
 
 
    static
-   TaskManager& Instance() 
-   {
-      static TaskManager manager;
-      return manager;
-   }
+   TaskManager& Instance();
 
    void
    AddTask(ITask* NewTask);
@@ -77,6 +74,8 @@ class TaskManager : public QObject
    std::queue<ITask*> taskQueue;
 
    std::list<ITask*> runningTasks;
+
+   friend class TaskManagerWr;
 };
 
 

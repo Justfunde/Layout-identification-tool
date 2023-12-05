@@ -3,6 +3,25 @@
 
 #include <algorithm>
 
+
+TaskManager& TaskManager::Instance() 
+{
+   class TaskManagerWr
+   {
+      public:
+      TaskManager m;
+      QThread thread;
+      std::atomic_bool inited = false;
+   };
+   static TaskManagerWr wr;
+   if(!wr.inited.load())
+   {
+      wr.m.moveToThread(&wr.thread);
+      wr.inited.store(true);
+   }
+   return wr.m;
+}
+
 TaskManager::TaskManager()
    : stopFlag(false)
    , loopThread(&TaskManager::ManagerEventPool, this)
