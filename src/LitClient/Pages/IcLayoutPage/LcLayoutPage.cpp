@@ -15,6 +15,7 @@
 #include "LayoutCard/LayoutCard.hpp"
 
 #include "Include/LayoutReader.hpp"
+#include <string_view>
 
 
 constexpr std::string_view path = "/home/justfunde/work/Layout-identification-tool/src/Common/Libs/LayoutReader/Test/MskFiles/2LABA.MSK";
@@ -31,7 +32,7 @@ LcLayoutPage::LcLayoutPage(QWidget* Parent)
    tb->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
    mainW->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-   const QString path = "/home/justfunde/work/Layout-identification-tool/src/LitClient/Test/LayoutFiles";
+   const QString path = "/home/justfundeer/work/Layout-identification-tool/src/LitClient/Test/LayoutFiles";
    if(!QDir(path).exists())
    {
       return;
