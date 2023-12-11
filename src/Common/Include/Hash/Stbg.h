@@ -5,8 +5,6 @@
 #include <string.h>
 #include <malloc.h>
 
-#include "StbgConstants.h"
-
 #define BLOCK_SIZE 64
 
 typedef uint8_t vect[BLOCK_SIZE];
@@ -17,7 +15,7 @@ typedef struct GOSTHashContext
     vect hash;   ///< Хеш
     vect h;      ///< Промежуточный результат
     vect N;
-    vect Sigma;  ///< Контрольная сумма 
+    vect Sigma;  ///< Контрольная сумма
     vect v_0;    ///< InitVector
     vect v_512;  ///< InitVector
     size_t buf_size; ///< Размер буффера кеширования

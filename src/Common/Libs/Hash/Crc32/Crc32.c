@@ -4,15 +4,14 @@
  * @brief Crc32 hash function definition
  * @version 0.1
  * @date 2023-02-08
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
-#include "Include/Crc32.h"
-#include <stdexcept>
+#include "Include/Hash/Crc32.h"
 
 
-constexpr uint32_t g_crc32Table[] =
+const static uint32_t g_crc32Table[] =
 {
     0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA,
     0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3,
@@ -82,15 +81,14 @@ constexpr uint32_t g_crc32Table[] =
 
 
 Crc32Hash
-Crc32::CalcHash(
+Crc32CalcHash(
    const char* Data,
    uint32_t DataSz)
 {
-   if(nullptr == Data || 0 == DataSz) { throw std::invalid_argument("Invalid CRC32 argument!");}  
-
    Crc32Hash hash = 0;
-   const uint8_t* pBuf = reinterpret_cast<const uint8_t*>(Data);//maybe better will be implicit convertion
-   
+
+   const uint8_t* pBuf = (const uint8_t*)(Data);//maybe better will be implicit convertion
+
    hash = ~hash;
    while (DataSz--)
    {

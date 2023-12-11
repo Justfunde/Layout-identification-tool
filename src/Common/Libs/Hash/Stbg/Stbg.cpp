@@ -1,5 +1,6 @@
-#include "Include/Stbg.h"
+#include "Include/Hash/Stbg.h"
 
+#include "StbgConstants.h"
 
 //stage 1
 void
@@ -57,7 +58,7 @@ GOSTHashS(uint8_t *state)
 {
     int i;
     vect internal;
-    for (i = 63; i >= 0; i--) 
+    for (i = 63; i >= 0; i--)
         internal[i] = StbgConstants::Pi[state[i]];//Подстановки
     memcpy(state, internal, BLOCK_SIZE);
 }
@@ -184,9 +185,9 @@ GOSTHashUpdate(TGOSTHashContext *CTX, const uint8_t *data, size_t len)
    //Обработка блоков, в случае, если ранее пришел блок не кратный 64 или остался блок < 64 с пошлого этапа
    while (len)
    {
-      
+
       chk_size = 64 - CTX->buf_size; //Свободное место в буффере
-      if (chk_size > len) 
+      if (chk_size > len)
          chk_size = len;
       memcpy(&CTX->buffer[CTX->buf_size], data, chk_size);
       CTX->buf_size += chk_size;
