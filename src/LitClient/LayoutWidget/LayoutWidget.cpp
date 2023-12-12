@@ -19,9 +19,11 @@ LayoutWidget::LayoutWidget(QWidget* t_parent)
     connect(this, &LayoutWidget::setFile, [geometryWidget](const std::string_view t_fileName) {
         lds::LayoutData* layout = new lds::LayoutData();
         LayoutReader* p_reader = GetReader(std::wstring(t_fileName.begin(), t_fileName.end()));
+        if(!p_reader) { return;}
         p_reader->Read(layout);
 
         geometryWidget->setLayout(layout);
+        FreeReader(p_reader);
     });
 
     geometryWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
