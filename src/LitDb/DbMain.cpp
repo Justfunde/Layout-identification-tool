@@ -5,6 +5,8 @@
 #include <QStringList>
 #include <QDebug>
 
+
+
 /*
 1.Установить postgresql
 #!/bin/bash
@@ -14,7 +16,7 @@ sudo apt update
 sudo apt install -y postgresql postgresql-contrib libpq
 
 # Переключение на пользователя postgres и выполнение SQL команд
-sudo -u postgres psql <<EOF
+sudo -u postgres psql << EOF
 CREATE ROLE layouttooluser WITH LOGIN PASSWORD '12345678';
 CREATE DATABASE layouttooldb;
 
@@ -65,10 +67,9 @@ EOF
 Дебаг
 \t - посмотреть таблицы
 \du - список всех пользоователей
-
-
-
 */
+
+
 
 
 
