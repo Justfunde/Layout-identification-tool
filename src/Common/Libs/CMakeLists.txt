@@ -1,4 +1,5 @@
 add_subdirectory(FileMetadataParser)
 add_subdirectory(GeometrySignature)
+add_subdirectory(GeometryCharacteristic)
 add_subdirectory(LayoutReader)
 add_subdirectory(Hash)
