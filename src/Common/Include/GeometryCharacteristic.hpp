@@ -2,169 +2,98 @@
 #define __GEOMETRY_CHARACTERISTIC_H__
 
 #include "Include/LayoutData.hpp"
-
-#include <array>
-#include <string>
-#include <memory>
-#include <unordered_map>
-#include <algorithm>
-#include <exception>
-#include <numeric>
+#include <vector>
 #include <cmath>
+#include <numeric>
+#include <algorithm>
+#include <stdexcept>
+#include <type_traits>
 
-
-
-
-template<typename CoordArrT = std::vector<lds::Coord>>
+template<typename T>
 class GeometryCharacteristic
 {
-   public:
-   GeometryCharacteristic(lds::Geometry* Geometry)
+   static_assert(std::is_arithmetic<T>::value, "Требуется арифметический тип");
+
+public:
+   static GeometryCharacteristic Create(const lds::Geometry* Geometry)
    {
-      const auto& coordArr = Geometry->coords;
-      mean = CalcMean(coordArr);
-      variance = CalcVariance(coordArr, mean);
-      stdDev = CalcStdDev(variance);
-      covariance = CalcCovariance(coordArr, mean);
-      correlation = CalcCorrelation(covariance, stdDev.first, stdDev.second);
+      if (!Geometry) throw std::invalid_argument("Geometry не должен быть nullptr");
+      return GeometryCharacteristic(Geometry);
    }
 
-   GeometryCharacteristic(const GeometryCharacteristic& Characteristic)
+private:
+   explicit GeometryCharacteristic(const lds::Geometry* Geometry)
    {
-      mean        = Characteristic.mean;
-      variance    = Characteristic.variance;
-      stdDev      = Characteristic.stdDev;
-      covariance  = Characteristic.covariance;
-      correlation = Characteristic.correlation;
+      std::vector<double> XCoordArr, YCoordArr;
+
+      std::transform(Geometry->coords.begin(), Geometry->coords.end(), std::back_inserter(XCoordArr),
+                     [](const auto& Coord) { return static_cast<double>(Coord.x); });
+      std::transform(Geometry->coords.begin(), Geometry->coords.end(), std::back_inserter(YCoordArr),
+                     [](const auto& Coord) { return static_cast<double>(Coord.y); });
+
+      if (XCoordArr.empty() || YCoordArr.empty()) throw std::invalid_argument("Массивы координат не должны быть пустыми");
+
+      Mean = {CalcMean(XCoordArr), CalcMean(YCoordArr)};
+      Variance = {CalcVariance(XCoordArr, Mean.first), CalcVariance(YCoordArr, Mean.second)};
+      StdDev = {CalcStdDev(Variance.first), CalcStdDev(Variance.second)};
+      Covariance = CalcCovariance(XCoordArr, YCoordArr, Mean);
+      Correlation = CalcCorrelation(Covariance, StdDev.first, StdDev.second);
    }
 
-   GeometryCharacteristic(GeometryCharacteristic&& Characteristic) noexcept
+   /*
+      Подсчет среднего значения в массиве.
+      В контексте сравнения полигонов - позволяет проанализировать положение полигона в пространстве.(Охарактеризовать положение одним числом)
+   */
+   double CalcMean(const std::vector<double>& Arr)
    {
-      mean        = std::move(Characteristic.mean);
-      variance    = std::move(Characteristic.variance);
-      stdDev      = std::move(Characteristic.stdDev);
-      covariance  = Characteristic.covariance;
-      correlation = Characteristic.correlation;
+      return std::accumulate(Arr.begin(), Arr.end(), 0.0) / Arr.size();
    }
 
-   GeometryCharacteristic& operator=(GeometryCharacteristic Characteristic)
+   /*
+      Сравнивая стандартные отклонения и дисперсии, можно определить степень разброса вершин вокруг центра полигонов.
+      Полигоны с меньшим стандартным отклонением и дисперсией будут иметь более компактные формы, в то время как более высокие значения указывают на более растянутые и разбросанные формы.
+   */
+   double CalcVariance(const std::vector<double>& Coords, double Mean)
    {
-      std::swap(mean, Characteristic.mean);
-      std::swap(variance, Characteristic.variance);
-      std::swap(stdDev, Characteristic.stdDev);
-      covariance  = Characteristic.covariance;
-      correlation = Characteristic.correlation;
+      auto VarianceFunc = [Mean](double Acc, double C) { double Diff = C - Mean; return Acc + Diff * Diff; };
+      return std::accumulate(Coords.begin(), Coords.end(), 0.0, VarianceFunc) / (Coords.size() - 1);
    }
 
-   GeometryCharacteristic& operator=(GeometryCharacteristic&& Characteristic) noexcept
+   /**
+    * Сравнение ковариации двух полигонов может показать, имеют ли они схожую ориентацию.
+    * Например, если оба полигона имеют положительную ковариацию, это может указывать на то, что оба имеют наклон в одном и том же направлении. Отрицательная ковариация может указывать на противоположный наклон.
+   */
+   double CalcCovariance(const std::vector<double>& CoordsX, const std::vector<double>& CoordsY, const std::pair<double, double>& Mean)
    {
-      mean        = std::move(Characteristic.mean);
-      variance    = std::move(Characteristic.variance);
-      stdDev      = std::move(Characteristic.stdDev);
-      covariance  = Characteristic.covariance;
-      correlation = Characteristic.correlation;
+      if (CoordsX.size() != CoordsY.size()) throw std::invalid_argument("Массивы X и Y должны быть одинаковой длины");
+      double Sum = 0.0;
+      for (size_t i = 0; i < CoordsX.size(); ++i)
+      {
+         Sum += (CoordsX[i] - Mean.first) * (CoordsY[i] - Mean.second);
+      }
+      return Sum / (CoordsX.size() - 1);
    }
 
-   static
-   GeometryCharacteristic
-      Create(lds::Geometry* Geometry);
+   double CalcStdDev(double Variance)
+   {
+      return std::sqrt(Variance);
+   }
 
-   private:
+   /**
+    * Коэффициент корреляции дает понимание о направлении и степени линейной зависимости между координатами точек полигонов.
+    * Сильная положительная корреляция может свидетельствовать о схожести формы и ориентации полигонов. Если один полигон имеет высокую положительную корреляцию, а другой — низкую или отрицательную, это может указывать на значительные различия в их формах.
+   */
+   double CalcCorrelation(double Covariance, double StdDevX, double StdDevY)
+   {
+      if (StdDevX == 0 || StdDevY == 0) throw std::invalid_argument("Стандартное отклонение не должно быть 0");
+      return Covariance / (StdDevX * StdDevY);
+   }
 
-   std::shared_ptr<lds::Element>
-      NormGeometry(lds::Geometry* Geometry);
-
-   /** Расчет среднего значение*/
-   std::pair<double, double>
-      CalcMean(const CoordArrT& Coords);
-
-   /** Расчет дисперсии*/
-   std::pair<double, double>
-      CalcVariance(const CoordArrT& Coords, const std::pair<double, double>& Mean);
-
-   std::pair<double, double>
-      CalcStdDev(const std::pair<double, double>& Variance);
-
-   double
-      CalcCovariance(const CoordArrT& Coords, const std::pair<double, double>& Mean);
-
-   double
-      CalcCorrelation(double covariance, double stdDevX, double stdDevY);
-
-
-   private:
-   std::pair<double, double> mean;      // среднее значение x и y
-   std::pair<double, double> variance;  // дисперсий по х и у
-   std::pair<double, double> stdDev;    // стандартные отклонения х и у
-   double covariance; //ковариация х и у
-   double correlation; //корреляция между х и у
+   std::pair<double, double> Mean;      // Средние значения по X и Y
+   std::pair<double, double> Variance;  // Дисперсии по X и Y
+   std::pair<double, double> StdDev;    // Стандартные отклонения по X и Y
+   double Covariance;                   // Ковариация между X и Y
+   double Correlation;                  // Корреляция между X и Y
 };
 
-template<typename CoordArrT>
-GeometryCharacteristic<CoordArrT> GeometryCharacteristic<CoordArrT>::Create(lds::Geometry* Geometry) {
-    if (!Geometry) { throw std::invalid_argument("Geometry is null"); }
-
-    switch (Geometry->type) {
-        case lds::GeometryType::polygon:
-        case lds::GeometryType::rectangle: break;
-        case lds::GeometryType::text:
-        case lds::GeometryType::path:
-        case lds::GeometryType::reference:
-        default: throw std::invalid_argument("Invalid geometry type");
-    }
-
-   GeometryCharacteristic characteristic(Geometry);
-   return characteristic;
-}
-
-template<typename CoordArrT>
-std::pair<double, double> GeometryCharacteristic<CoordArrT>::CalcMean(const CoordArrT& Coords) {
-    auto accCoord = std::accumulate(
-        Coords.begin(), Coords.end(), typename CoordArrT::value_type(0, 0),
-        [](const auto& acc, const auto& c) {
-            return typename CoordArrT::value_type(acc.x + c.x, acc.y + c.y);
-        });
-
-    size_t count = std::distance(Coords.begin(), Coords.end());
-    return {accCoord.x / count, accCoord.y / count};
-}
-
-template<typename CoordArrT>
-std::pair<double, double> GeometryCharacteristic<CoordArrT>::CalcVariance(const CoordArrT& Coords, const std::pair<double, double>& Mean) {
-    auto meanDevAcc = std::accumulate(
-        Coords.begin(), Coords.end(), typename CoordArrT::value_type(0, 0),
-        [&Mean](const auto& acc, const auto& c) {
-            const auto cX = c.x - Mean.first;
-            const auto cY = c.y - Mean.second;
-            return typename CoordArrT::value_type(acc.x + cX * cX, acc.y + cY * cY);
-        });
-
-    size_t count = std::distance(Coords.begin(), Coords.end());
-    return {meanDevAcc.x / (count - 1), meanDevAcc.y / (count - 1)};
-}
-
-template<typename CoordArrT>
-std::pair<double, double> GeometryCharacteristic<CoordArrT>::CalcStdDev(const std::pair<double, double>& Variance) {
-    return {std::sqrt(Variance.first), std::sqrt(Variance.second)};
-}
-
-template<typename CoordArrT>
-double GeometryCharacteristic<CoordArrT>::CalcCovariance(const CoordArrT& Coords, const std::pair<double, double>& Mean) {
-    double covariance = std::accumulate(
-        Coords.begin(), Coords.end(), 0.0,
-        [&Mean](double sum, const typename CoordArrT::value_type& c) {
-            return sum + (c.x - Mean.first) * (c.y - Mean.second);
-        });
-
-    size_t count = std::distance(Coords.begin(), Coords.end());
-    return covariance / (count - 1);
-}
-
-template<typename CoordArrT>
-double GeometryCharacteristic<CoordArrT>::CalcCorrelation(double covariance, double stdDevX, double stdDevY) {
-    return covariance / (stdDevX * stdDevY);
-}
-
-
-
-#endif //! __GEOMETRY_CHARACTERISTIC_H__
+#endif // !__GEOMETRY_CHARACTERISTIC_H__
