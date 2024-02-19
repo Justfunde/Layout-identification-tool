@@ -2,169 +2,85 @@
 #include <string>
 #include <tuple>
 #include <utility>
+#include <iostream>
 
-#include "Include/GeometrySignature.hpp"
+#include <boost/format.hpp>
 
-TEST(LCSkTest, LCSk_NoShifting_Test)
+#include "Include/GeometryCharacteristic.hpp"
+#include "Include/LayoutReader.hpp"
+
+void
+InPrintGeometryInfo(lds::Geometry* Geom)
 {
-   const std::vector<std::tuple<std::string, std::string, std::string>> testCases = {
-       std::make_tuple("ABCDEF", "UBCDXY", "BCD"),
-       std::make_tuple("123456789", "123", "123"),
-       std::make_tuple("XMJYAUZ", "MZJAWXU", "X"),
-       std::make_tuple("ABCDEFG", "XABYCDEZG", "CDE"),
-       std::make_tuple("1010101", "1011101", "101"),
-       std::make_tuple("COMPUTER", "HOUSEBOAT", "O"),
-       std::make_tuple("GXTXAYB", "AGGTAB", "G"),
-       std::make_tuple("AAAAAA", "AA", "AA"),
-       std::make_tuple("AXY", "ADXCPY", "A"),
-       std::make_tuple("FTHELOREMIPSUM", "JGXTHEMLOREM", "LOREM"),
-       std::make_tuple("CHAINCODE", "CHAIRCODE", "CHAI"),
-       std::make_tuple("SIGNATURE", "SIGNATYRE", "SIGNAT"),
-       std::make_tuple("CONSTITUTION", "INSTITUTION", "NSTITUTION"),
-       // Случаи без совпадений
-       std::make_tuple("ABC", "DEF", ""),
-       std::make_tuple("123", "456", ""),
-       std::make_tuple("XYZ", "PQR", ""),
-   };
+      auto GeomType2Text = [](lds::GeometryType t)
+      {
+         switch (t)
+         {
+            case lds::GeometryType::polygon: return "polygon";
+            case lds::GeometryType::path: return "path";
+            case lds::GeometryType::text: return "text";
+            case lds::GeometryType::rectangle: return "rectangle";
+            case lds::GeometryType::reference: return "reference";
+            default: return "undefined";
+         }
+      };
 
-   for (const auto &[sig1, sig2, expected] : testCases)
+   std::cout << "Geom type : " << GeomType2Text(Geom->type) << std::endl;
+   for(std::size_t i = 0; i < Geom->coords.size(); ++i)
    {
-      EXPECT_EQ(LCSAlgorithm::LCSk(sig1, sig2), expected);
+      std::cout << boost::format("Coord[%1%] = [%2%, %3%]\n") % i % Geom->coords[i].x % Geom->coords[i].y;
    }
-};
+}
 
-TEST(LCSkTest, LCSk_Shifting_Test)
+void
+InPrintGeometryChar(const GeometryCharacteristic& Chars)
 {
-   std::vector<std::tuple<std::string, std::string, std::string>> tests = {
-       {"020406", "602040", "020406"},
-       {"123456789", "891234567", "123456789"},
-       {"abcdefg", "efgabcd", "abcdefg"},
-       {"abcdef", "cdefab", "abcdef"},
-       {"1234", "3412", "1234"},
-       {"aaaa", "aaaa", "aaaa"},
-       {"a1b2c3", "1b2c3a", "a1b2c3"},
-       {"abcde", "eabcd", "abcde"},
-       {"123abc", "abc123", "123abc"},
-       {"xyza", "axyz", "xyza"},
-       {"mnop", "opmn", "mnop"},
-       {"testcase", "casetest", "testcase"},
-       {"rotation", "tationro", "rotation"},
-       {"signature", "gnaturesi", "signature"},
-       {"polygon", "gonpoly", "polygon"},
-       {"stringmatch", "tchstringma", "stringmatch"},
-       {"substr", "trsubs", "substr"},
-       {"shifting", "ftingshi", "shifting"},
-       {"cycle", "ecycl", "cycle"},
-       {"framework", "workframe", "framework"},
-   };
+   std::cout << boost::format("Mean(x,y) = [%1%, %2%]\n") % Chars.GetMean().first % Chars.GetMean().second;
+   std::cout << boost::format("Variance(x,y) = [%1%, %2%]\n") % Chars.GetVariance().first % Chars.GetVariance().second;
+   std::cout << boost::format("StdDev(x,y) = [%1%, %2%]\n") % Chars.GetStdDev().first % Chars.GetStdDev().second;
+   std::cout << "Covariance = " << Chars.GetCovariance() << std::endl;
+   std::cout << "Correlation = " << Chars.GetCorrelation() << std::endl;
+}
 
-   for (const auto &[sig1, sig2, expected] : tests)
+void
+InPrintLayoutData(lds::LayoutData* Data)
+{
+   const auto pLib = Data->libraries[0];
+   const auto pElem = pLib->elements[0];
+   std::cout << boost::format("Library name : %1%\n") % pLib->name;
+   std::cout << boost::format("Elem name %1%\n") % pElem->name;
+   std::cout << boost::format("MIN = [%1%, %2%], MAX = [%3%, %4%]\n") % pElem->min.x % pElem->min.y % pElem->max.x % pElem->max.y;
+   /*std::cout << "Geometries info: \n__________________BEGIN__________________\n\n";
+   std::size_t i = 0;
+   for(const auto it : pElem->geometries)
    {
-      EXPECT_EQ(LCSAlgorithm::CompareWithLCSkShifting(sig1, sig2), expected);
+      std::cout << boost::format("\n__________________BEGIN_INFO_%1%__________________\n") % i++;
+      InPrintGeometryInfo(it);
+      std::cout << boost::format("\n__________________END_INFO_%1%__________________\n") % i++;
    }
-};
+   std::cout << "\n__________________END__________________\n\n";*/
+}
 
-TEST(GeometrySignature, GeometrySignatureCreationTest)
+
+TEST(GeometryCharacteristicTest, GeometryCharacteristicTest_1)
 {
-   /*
-      Directions
-      7 0 1
-      6   2
-      5 4 3
-   */
-   //Box
+   const std::string fPath = std::string(LAYOUTS_DIR) + "/sky130_fd_sc_hvl__inv_1.gds";
 
-   auto box = std::make_unique<lds::Rectangle>();
-   std::vector<lds::Coord> coords =
+   auto reader = GetReader(std::wstring(fPath.begin(), fPath.end()));
+   lds::LayoutData data;
+   EXPECT_EQ(reader->Read(&data), true);
+
+   InPrintLayoutData(&data);
+
+   auto charsMap = GeometryCharacteristic::Create(data.libraries[0]->elements[0]);
+
+   for(const auto& [key, value] : charsMap)
    {
-      {0, 0},
-      {10, 0},
-      {10, 10},
-      {0, 10},
-      {0, 0}
-   };
-   box->coords = std::move(coords);
-
-   const std::string etalonBoxSig = "2064";
-
-   EXPECT_EQ(etalonBoxSig, GeometrySignature(box.get()).ToString());
-
-   auto poly = std::make_unique<lds::Polygon>();
-   coords = {
-    {0, 0},    // Точка 1
-    {10, 0},   // Точка 2, вправо от Точки 1
-    {10, 5},   // Точка 3, вверх от Точки 2
-    {5, 5},    // Точка 4, влево от Точки 3
-    {5, 10},   // Точка 5, вверх от Точки 4
-    {15, 10},  // Точка 6, вправо от Точки 5
-    {15, -5},  // Точка 7, вниз от Точки 6
-    {0, -5},   // Точка 8, влево от Точки 7
-    {0, -10},  // Точка 9, вниз от Точки 8
-    {0, 0},    // Точка 10, вверх до Точки 1 (замыкает полигон)
-};
-poly->coords = std::move(coords);
-
-const std::string etalonPolySig = "206024640";
-
-EXPECT_EQ(etalonPolySig, GeometrySignature(poly.get()).ToString());
-
-};
-
-
-TEST(GeometrySignature, GeometrySignatureComparationTest)
-{
-   /*
-      Directions
-      7 0 1
-      6   2
-      5 4 3
-   */
-   //Box
-
-   auto boxes = std::make_pair(std::make_unique<lds::Rectangle>(),std::make_unique<lds::Rectangle>());
-   boxes.first->coords = {
-      {10, 0},
-      {10, 10},
-      {0, 10},
-      {0, 0},
-      {10, 0}};
-
-   boxes.second->coords = {
-      {0, 0},
-      {10, 0},
-      {10, 10},
-      {0, 10},
-      {0, 0}};
-
-   EXPECT_EQ(GeometrySignature(boxes.first.get()).FindEntry(GeometrySignature(boxes.second.get())).length(), 4);
-
-   auto polygons = std::make_pair(std::make_unique<lds::Rectangle>(),std::make_unique<lds::Rectangle>());
-   polygons.first->coords = {
-      {0, 0},    // Точка 1
-    {10, 0},   // вправо от Точки 1
-    {10, 5},   // вверх от Точки 2
-    {5, 5},    // влево от Точки 3
-    {5, 10},   // вверх от Точки 4
-    {15, 10},  // вправо от Точки 5
-    {15, -5},  // вниз от Точки 6
-    {0, -5},   // влево от Точки 7
-    {0, -10},  // вниз от Точки 8
-    {0, 0}};    //вверх до Точки 1 (замыкает полигон)};
-
-   polygons.second->coords = {
-     {0, 0},    // Начальная точка
-    {0, -10},  // Вниз от Точки 1 к Точке 2
-    {5, -10},  // Вправо от Точки 2 к Точке 3
-    {5, -5},   // Вверх от Точки 3 к Точке 4
-    {10, -5},  // Вправо от Точки 4 к Точке 5
-    {10, -15}, // Вниз от Точки 5 к Точке 6
-    {-5, -15}, // Влево от Точки 6 к Точке 7
-    {-5, 0},   // Вверх от Точки 7 к Точке 8
-    {-10, 0},  // Влево от Точки 8 к Точке 9
-    {0, 0}    // Вверх от Точки 9 к Точке 10 (замыкает полигон)
-   };
-
-   EXPECT_EQ(GeometrySignature(polygons.first.get()).FindEntry(GeometrySignature(polygons.second.get())).length(), 4);
+      std::cout << "\n__________________BEGIN_BUNDLE_INFO__________________\n\n";
+      InPrintGeometryInfo(key);
+      InPrintGeometryChar(value);
+      std::cout << "\n__________________END_BUNDLE_INFO__________________\n\n";
+   }
 
 };
 

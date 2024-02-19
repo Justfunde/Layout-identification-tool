@@ -9,10 +9,12 @@
 #include <stdexcept>
 #include <type_traits>
 
-template<typename T>
+
+
+//template<typename T>
 class GeometryCharacteristic
 {
-   static_assert(std::is_arithmetic<T>::value, "Требуется арифметический тип");
+   //static_assert(std::is_arithmetic<T>::value, "Требуется арифметический тип");
 
 public:
    static GeometryCharacteristic Create(const lds::Geometry* Geometry)
@@ -20,6 +22,33 @@ public:
       if (!Geometry) throw std::invalid_argument("Geometry не должен быть nullptr");
       return GeometryCharacteristic(Geometry);
    }
+
+   static
+   std::map<lds::Geometry*, GeometryCharacteristic>
+   Create(lds::Element* Elem)
+   {
+      if (!Elem) throw std::invalid_argument("Geometry не должен быть nullptr");
+
+      std::map<lds::Geometry*, GeometryCharacteristic> chars;
+      for(const auto it : Elem->geometries)
+      {
+         auto normGeometry = std::make_unique<lds::Geometry>(*it);
+         for(auto& it : normGeometry->coords)
+         {
+            it.x -= Elem->min.x;
+            it.y -= Elem->min.y;
+         }
+         chars.emplace(it, GeometryCharacteristic::Create(normGeometry.get()));
+      }
+
+      return chars;
+   }
+
+   const std::pair<double, double>& GetMean()        const { return Mean; };
+   const std::pair<double, double>& GetVariance()    const { return Variance; };
+   const std::pair<double, double>& GetStdDev()      const { return StdDev; };
+   double                    GetCovariance()  const { return Covariance; };
+   double                    GetCorrelation() const { return Correlation; };
 
 private:
    explicit GeometryCharacteristic(const lds::Geometry* Geometry)

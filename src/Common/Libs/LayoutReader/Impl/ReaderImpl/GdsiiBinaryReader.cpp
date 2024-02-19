@@ -3,7 +3,7 @@
 
 #include <cstring>
 #include <fstream>
-#pragma warning(disable: 26451) // Warning C26451 Arithmetic overflow : Using operator '+' on a 4 byte value and then casting the result to a 8 byte value. 
+#pragma warning(disable: 26451) // Warning C26451 Arithmetic overflow : Using operator '+' on a 4 byte value and then casting the result to a 8 byte value.
                                 // Cast the value to the wider type before calling operator '+' to avoid overflow(io.2).
 
 //!!! Don't touch these lines on comparison
@@ -48,8 +48,6 @@ bool LayoutReader_GDSIIbin::IsMyFormat(const std::wstring &fName) {
 }
 
 bool LayoutReader_GDSIIbin::Read(lds::LayoutData *layout) {
-  if (!p_data)
-    return false;
   p_data = layout;
 
   file.open(std::string(fileName.begin(), fileName.end()), std::ios::in | std::ios::binary);
@@ -549,7 +547,7 @@ void LayoutReader_GDSIIbin::ReadSection_XY(GDSIIRecord &_record) {
       ;
       //MessageManager::Get()->PushError("Format error. Found XY section given for inproper type of element.");
   }
-  
+
   if (p_activeGeometry->coords.empty())
     return;
 
