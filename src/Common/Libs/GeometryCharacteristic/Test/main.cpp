@@ -3,6 +3,9 @@
 #include <tuple>
 #include <utility>
 #include <iostream>
+#include <filesystem>
+#include <fstream>
+#include <exception>
 
 #include <boost/format.hpp>
 
@@ -62,27 +65,138 @@ InPrintLayoutData(lds::LayoutData* Data)
 }
 
 
-TEST(GeometryCharacteristicTest, GeometryCharacteristicTest_1)
+//c TEST(GeometryCharacteristicTest, GeometryCharacteristicTest_1)
+//{
+//   const std::string fPath = std::string(LAYOUTS_DIR) + "/sky130_fd_sc_hvl__inv_1.gds";
+//
+//   auto reader = GetReader(std::wstring(fPath.begin(), fPath.end()));
+//   lds::LayoutData data;
+//   EXPECT_EQ(reader->Read(&data), true);
+//
+//   InPrintLayoutData(&data);
+//
+//   auto charsMap = GeometryCharacteristic::Create(data.libraries[0]->elements[0]);
+//
+//   for(const auto& [key, value] : charsMap)
+//   {
+//      std::cout << "\n__________________BEGIN_BUNDLE_INFO__________________\n\n";
+//      InPrintGeometryInfo(key);
+//      InPrintGeometryChar(value);
+//      std::cout << "\n__________________END_BUNDLE_INFO__________________\n\n";
+//   }
+//
+//};
+
+
+static
+void
+InFlushFileInfo(lds::LayoutData& Data)
 {
-   const std::string fPath = std::string(LAYOUTS_DIR) + "/sky130_fd_sc_hvl__inv_1.gds";
+   const std::wstring outputFileName = std::filesystem::path(Data.fileName).filename().wstring() + L".info";
+   const std::filesystem::path outFilePath(std::string(LAYOUTS_DATA_OUT_DIR) + "/" + std::string(outputFileName.begin(),outputFileName.end()));
 
-   auto reader = GetReader(std::wstring(fPath.begin(), fPath.end()));
-   lds::LayoutData data;
-   EXPECT_EQ(reader->Read(&data), true);
+   const auto& elem = Data.libraries[0]->elements[0];
+   const auto& geometries = elem->geometries;
 
-   InPrintLayoutData(&data);
+   std::unordered_map<lds::GeometryType, std::string> typeToNameMap =
+      {
+         {lds::GeometryType::polygon, "polygon"    },
+         {lds::GeometryType::path, "path"          },
+         {lds::GeometryType::text, "text"          },
+         {lds::GeometryType::rectangle, "rectangle"},
+         {lds::GeometryType::reference, "reference"}
+      };
 
-   auto charsMap = GeometryCharacteristic::Create(data.libraries[0]->elements[0]);
+   auto CalcGeometries = [](const std::vector<lds::Geometry*> Data)
+      {
+         std::unordered_map<lds::GeometryType, std::size_t> GeometriesCnt =
+            {
+               {lds::GeometryType::polygon,   0 },
+               {lds::GeometryType::path,      0 },
+               {lds::GeometryType::text,      0 },
+               {lds::GeometryType::rectangle, 0 },
+               {lds::GeometryType::reference, 0 }};
+         for(const auto it : Data)
+         {
+            if(it) { GeometriesCnt[it->type]++;}
+         }
+         return GeometriesCnt;
+      };
 
-   for(const auto& [key, value] : charsMap)
+   auto CalcPoint = [](const std::vector<lds::Geometry*> Data)
+      {
+         std::unordered_map<lds::GeometryType, std::unordered_map<std::size_t, std::size_t>> pointCntMap;// secont map is <point count, geometry count>
+         for(const auto geom : Data)
+         {
+            if(!geom) { continue;}
+
+            const auto pointCnt = geom->coords.size() - 1;
+            if(pointCntMap[geom->type].contains(pointCnt))
+            {
+               pointCntMap[geom->type][pointCnt]++;
+            }
+            else
+            {
+               pointCntMap[geom->type].insert({pointCnt, 0});
+            }
+
+         }
+         return pointCntMap;
+      };
+
+   std::ofstream fileStream(outFilePath.string(), std::ios::trunc);
+   if(!fileStream) { throw std::runtime_error("");}
+
+   fileStream << "Element name: " << elem->name << std::endl;
+   fileStream << "Element min coordinates: " << boost::format("[%1%, %2%]\n") % elem->min.x % elem->min.y;
+   fileStream << "Element max coordinates: " << boost::format("[%1%, %2%]\n") % elem->max.x % elem->max.y;
+   fileStream << "Element square: " << (elem->max.x - elem->min.x) * (elem->max.y - elem->min.y);
+   fileStream << "Geometries count:\n";
+   for(const auto& [type, cnt] : CalcGeometries(geometries))
    {
-      std::cout << "\n__________________BEGIN_BUNDLE_INFO__________________\n\n";
-      InPrintGeometryInfo(key);
-      InPrintGeometryChar(value);
-      std::cout << "\n__________________END_BUNDLE_INFO__________________\n\n";
+      fileStream << boost::format("%1% : %2%\n") % typeToNameMap[type] % cnt;
    }
 
-};
+   fileStream << "Geometry to point count distribution" << std::endl;
+
+   //std::unordered_map<lds::GeometryType, std::unordered_map<std::size_t, std::size_t>> pointCntMap // secont map is <point count, geometry count>
+
+
+   for(const auto& [type, pointCntMap]: CalcPoint(geometries))
+   {
+      fileStream << boost::format("Type: %1%\nMap of [pointCount, geometryCount]\n{\n") % typeToNameMap[type];
+      for(const auto& [pointCnt, geomCnt] : pointCntMap)
+      {
+         fileStream << boost::format("\t[%1%, %2%]\n") % pointCnt % geomCnt;
+      }
+      fileStream << "}" << std::endl;
+   }
+   fileStream.close();
+
+}
+
+TEST(GeometryCharacteristicTest, GeometryExtractTest_1)
+{
+   //LAYOUTS_DATA_OUT_DIR
+
+
+
+   std::filesystem::path outDir = LAYOUTS_DATA_OUT_DIR;
+   EXPECT_EQ(std::filesystem::exists(outDir), true);
+   EXPECT_EQ(std::filesystem::is_directory(outDir), true);
+   for(const auto& dirEntry : std::filesystem::directory_iterator(std::filesystem::path(LAYOUTS_DIR)))
+   {
+      const auto fileName = dirEntry.path().wstring();
+      std::unique_ptr<LayoutReader> reader(GetReader(fileName));
+      EXPECT_NE(reader, nullptr);
+      lds::LayoutData data;
+      EXPECT_EQ(reader->Read(&data), true);
+      InFlushFileInfo(data);
+
+
+
+   }
+}
 
 
 int main(int argc, char **argv)
