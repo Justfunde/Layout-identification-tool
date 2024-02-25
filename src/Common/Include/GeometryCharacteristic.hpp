@@ -103,6 +103,7 @@ private:
       return Sum / (CoordsX.size() - 1);
    }
 
+   /* оценка степени их разброса вокруг среднего положения (центра масс) полигона*/
    double CalcStdDev(double Variance)
    {
       return std::sqrt(Variance);

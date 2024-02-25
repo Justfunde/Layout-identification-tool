@@ -137,7 +137,7 @@ InFlushFileInfo(lds::LayoutData& Data)
             }
             else
             {
-               pointCntMap[geom->type].insert({pointCnt, 0});
+               pointCntMap[geom->type].insert({pointCnt, 1});
             }
 
          }
@@ -150,7 +150,7 @@ InFlushFileInfo(lds::LayoutData& Data)
    fileStream << "Element name: " << elem->name << std::endl;
    fileStream << "Element min coordinates: " << boost::format("[%1%, %2%]\n") % elem->min.x % elem->min.y;
    fileStream << "Element max coordinates: " << boost::format("[%1%, %2%]\n") % elem->max.x % elem->max.y;
-   fileStream << "Element square: " << (elem->max.x - elem->min.x) * (elem->max.y - elem->min.y);
+   fileStream << "Element square: " << (elem->max.x - elem->min.x) * (elem->max.y - elem->min.y) << std::endl;
    fileStream << "Geometries count:\n";
    for(const auto& [type, cnt] : CalcGeometries(geometries))
    {
