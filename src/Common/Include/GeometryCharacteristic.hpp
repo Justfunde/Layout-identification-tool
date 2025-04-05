@@ -3,6 +3,7 @@
 
 #include "Include/LayoutData.hpp"
 #include <algorithm>
+#include <algorithm>
 #include <cmath>
 #include <cmath> // std::fabs, std::sqrt, std::hypot
 #include <iostream>
@@ -13,16 +14,25 @@
 #include <type_traits>
 #include <utility> // std::pair
 #include <vector>
+#include <utility> // std::pair
+#include <vector>
 
+// template<typename T>
 // template<typename T>
 class GeometryCharacteristic
 {
+   // static_assert(std::is_arithmetic<T>::value, "Требуется арифметический тип");
    // static_assert(std::is_arithmetic<T>::value, "Требуется арифметический тип");
 
  public:
    static GeometryCharacteristic
    Create(const lds::Geometry* Geometry)
+ public:
+   static GeometryCharacteristic
+   Create(const lds::Geometry* Geometry)
    {
+      if (!Geometry)
+         throw std::invalid_argument("Geometry не должен быть nullptr");
       if (!Geometry)
          throw std::invalid_argument("Geometry не должен быть nullptr");
       return GeometryCharacteristic(Geometry);
@@ -33,8 +43,11 @@ class GeometryCharacteristic
    {
       if (!Elem)
          throw std::invalid_argument("Geometry не должен быть nullptr");
+      if (!Elem)
+         throw std::invalid_argument("Geometry не должен быть nullptr");
 
       std::map<lds::Geometry*, GeometryCharacteristic> chars;
+      for (const auto it : Elem->geometries)
       for (const auto it : Elem->geometries)
       {
          if (minCoordCount > (it->coords.size() - 1))
@@ -42,6 +55,7 @@ class GeometryCharacteristic
             continue;
          }
          auto normGeometry = std::make_unique<lds::Geometry>(*it);
+         for (auto& it : normGeometry->coords)
          for (auto& it : normGeometry->coords)
          {
             it.x -= Elem->min.x;
@@ -114,6 +128,7 @@ class GeometryCharacteristic
    }*/
 
  private:
+ private:
    explicit GeometryCharacteristic(const lds::Geometry* Geometry)
    {
       std::vector<double> XCoordArr, YCoordArr;
@@ -121,10 +136,16 @@ class GeometryCharacteristic
       std::transform(Geometry->coords.begin(), Geometry->coords.end(), std::back_inserter(XCoordArr),
                      [](const auto& Coord)
       { return static_cast<double>(Coord.x); });
+                     [](const auto& Coord)
+      { return static_cast<double>(Coord.x); });
       std::transform(Geometry->coords.begin(), Geometry->coords.end(), std::back_inserter(YCoordArr),
                      [](const auto& Coord)
       { return static_cast<double>(Coord.y); });
+                     [](const auto& Coord)
+      { return static_cast<double>(Coord.y); });
 
+      if (XCoordArr.empty() || YCoordArr.empty())
+         throw std::invalid_argument("Массивы координат не должны быть пустыми");
       if (XCoordArr.empty() || YCoordArr.empty())
          throw std::invalid_argument("Массивы координат не должны быть пустыми");
 
@@ -145,6 +166,8 @@ class GeometryCharacteristic
    */
    double
    CalcMean(const std::vector<double>& Arr)
+   double
+   CalcMean(const std::vector<double>& Arr)
    {
       return std::accumulate(Arr.begin(), Arr.end(), 0.0) / Arr.size();
    }
@@ -155,7 +178,11 @@ class GeometryCharacteristic
    */
    double
    CalcVariance(const std::vector<double>& Coords, double Mean)
+   double
+   CalcVariance(const std::vector<double>& Coords, double Mean)
    {
+      auto VarianceFunc = [Mean](double Acc, double C)
+      { double Diff = C - Mean; return Acc + Diff * Diff; };
       auto VarianceFunc = [Mean](double Acc, double C)
       { double Diff = C - Mean; return Acc + Diff * Diff; };
       return std::accumulate(Coords.begin(), Coords.end(), 0.0, VarianceFunc) / (Coords.size() - 1);
@@ -167,7 +194,12 @@ class GeometryCharacteristic
     */
    double
    CalcCovariance(const std::vector<double>& CoordsX, const std::vector<double>& CoordsY, const std::pair<double, double>& Mean)
+    */
+   double
+   CalcCovariance(const std::vector<double>& CoordsX, const std::vector<double>& CoordsY, const std::pair<double, double>& Mean)
    {
+      if (CoordsX.size() != CoordsY.size())
+         throw std::invalid_argument("Массивы X и Y должны быть одинаковой длины");
       if (CoordsX.size() != CoordsY.size())
          throw std::invalid_argument("Массивы X и Y должны быть одинаковой длины");
       double Sum = 0.0;
@@ -181,6 +213,8 @@ class GeometryCharacteristic
    /* оценка степени их разброса вокруг среднего положения (центра масс) полигона*/
    double
    CalcStdDev(double Variance)
+   double
+   CalcStdDev(double Variance)
    {
       return std::sqrt(Variance);
    }
@@ -188,6 +222,9 @@ class GeometryCharacteristic
    /**
     * Коэффициент корреляции дает понимание о направлении и степени линейной зависимости между координатами точек полигонов.
     * Сильная положительная корреляция может свидетельствовать о схожести формы и ориентации полигонов. Если один полигон имеет высокую положительную корреляцию, а другой — низкую или отрицательную, это может указывать на значительные различия в их формах.
+    */
+   double
+   CalcCorrelation(double Covariance, double StdDevX, double StdDevY)
     */
    double
    CalcCorrelation(double Covariance, double StdDevX, double StdDevY)
@@ -199,6 +236,11 @@ class GeometryCharacteristic
       return Covariance / (StdDevX * StdDevY);
    }
 
+   std::pair<double, double> Mean;     // Средние значения по X и Y
+   std::pair<double, double> Variance; // Дисперсии по X и Y
+   std::pair<double, double> StdDev;   // Стандартные отклонения по X и Y
+   double Covariance;                  // Ковариация между X и Y
+   double Correlation;                 // Корреляция между X и Y
    std::pair<double, double> Mean;     // Средние значения по X и Y
    std::pair<double, double> Variance; // Дисперсии по X и Y
    std::pair<double, double> StdDev;   // Стандартные отклонения по X и Y
