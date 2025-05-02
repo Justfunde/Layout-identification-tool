@@ -1,0 +1,36 @@
+Analyzing cell names with Livenshtein algorithm, n = 3
+Possible match 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfrtp_1' in layout
+Analyzing cell with calculation of relative deviation, > 85%
+No issues were found
+Analyzing cell with geometries count, < 10% difference
+No issues were found
+Analyzing distribution of polygon points in cells
+No issues were found
+Analyzing stat characteristics of geometries in cells
+No issues were found
+----------------------DetailedAnalysis----------------------
+Analyzing sky130_fd_sc_hd__dfrtp_1...
+Compability chance on layer 95: 92.0898
+Compability chance on layer 122: 99.8779
+Compability chance on layer 83: 100
+Compability chance on layer 94: 95.7764
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 65.1367
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 56.7627
+Compability chance on layer 66: 65.9424
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 88.5498
+Compability chance on layer 64: 99.8535
+Total chance: 88.8503
+--------------------------------------------------------------------
+
+================= Execution times =================
+1) Livenshtein matching:           0 ms
+2) Relative deviation (>85%):       0 ms
+3) Geometries count (<10% diff):   0 ms
+4) Polygon points distribution:    31 ms
+5) Stat characteristics:           0 ms
+6) Mask analysis:           46 ms
+==================================================

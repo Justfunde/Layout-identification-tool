@@ -1,0 +1,53 @@
+Analyzing cell names with Livenshtein algorithm, n = 3
+Possible match 'sky130_fd_sc_hd__mux4_1' with 'sky130_fd_sc_hd__mux2_1' in layout
+Possible match 'sky130_fd_sc_hd__mux4_1' with 'sky130_fd_sc_hd__mux4_1' in layout
+Analyzing cell with calculation of relative deviation, > 85%
+Possible match (100%) 'sky130_fd_sc_hd__mux4_1' with 'sky130_fd_sc_hd__mux4_1' in layout
+Analyzing cell with geometries count, < 10% difference
+Possible match (difference 0%) 'sky130_fd_sc_hd__mux4_1' with 'sky130_fd_sc_hd__mux4_1' in layout
+Analyzing distribution of polygon points in cells
+No issues were found
+Analyzing stat characteristics of geometries in cells
+Possible match (42 equal geometry characteristics) 'sky130_fd_sc_hd__mux4_1' with 'sky130_fd_sc_hd__mux4_1' in layout
+----------------------DetailedAnalysis----------------------
+Analyzing sky130_fd_sc_hd__mux2_1...
+Compability chance on layer 95: 95.2881
+Compability chance on layer 122: 99.707
+Compability chance on layer 83: 100
+Compability chance on layer 94: 95.1172
+Compability chance on layer 81: 97.2168
+Compability chance on layer 68: 94.0918
+Compability chance on layer 236: 97.2168
+Compability chance on layer 93: 98.4619
+Compability chance on layer 67: 61.8652
+Compability chance on layer 66: 67.7734
+Compability chance on layer 78: 98.4863
+Compability chance on layer 65: 79.6143
+Compability chance on layer 64: 99.707
+Total chance: 91.1189
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__mux4_1...
+Compability chance on layer 95: 100
+Compability chance on layer 122: 100
+Compability chance on layer 83: 100
+Compability chance on layer 94: 100
+Compability chance on layer 81: 100
+Compability chance on layer 68: 100
+Compability chance on layer 236: 100
+Compability chance on layer 93: 100
+Compability chance on layer 67: 100
+Compability chance on layer 66: 100
+Compability chance on layer 78: 100
+Compability chance on layer 65: 100
+Compability chance on layer 64: 100
+Total chance: 100
+--------------------------------------------------------------------
+
+================= Execution times =================
+1) Livenshtein matching:           0 ms
+2) Relative deviation (>85%):       0 ms
+3) Geometries count (<10% diff):   0 ms
+4) Polygon points distribution:    31 ms
+5) Stat characteristics:           0 ms
+6) Mask analysis:           100 ms
+==================================================

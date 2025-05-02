@@ -1,0 +1,111 @@
+@startuml
+participant Main as "Конвейер проверки топологий"
+participant LayoutReader as "LayoutParserModule"
+participant LivenshteinDistance as "LevenshteinDistanceModule"
+participant SquareComparator as "SquareComparator"
+participant GeometrySignature as "GeometrySignatureModule"
+participant GeometryCharacteristic as "GeometryCharacteristicModule"
+participant LayoutBitmapGenerator as "BitmapGeneratorModule"
+
+Main -> LayoutReader: Запрос чтения файла с крупной топологией (large layout)
+LayoutReader --> Main: Возвращение данных топологии (largeLayoutData)
+
+Main -> LayoutReader: Запрос чтения файла с эталонной ячейкой (cell layout)
+LayoutReader --> Main: Возвращение данных топологии ячейки (cellData)
+
+Main -> Main: Определение эталонной ячейки и набора исследуемых элементов
+
+group Шаг 1: Анализ схожести имён ячеек
+loop Для каждой ячейки в крупной топологии
+  Main -> LivenshteinDistance: Вычислить расстояние Левенштейна между именами ячеек
+  LivenshteinDistance --> Main: Вернуть значение расстояния
+  alt Если расстояние меньше заданного порога
+    Main -> Main: Сохранить текущую ячейку для детального анализа
+  end
+end
+end
+
+group Шаг 2: Анализ относительного совпадения площадей
+loop Для каждой ячейки в крупной топологии
+  Main -> SquareComparator: Рассчитать процент совпадения площадей ячеек
+  SquareComparator --> Main: Вернуть процент совпадения
+  alt Если совпадение превышает заданный порог
+    Main -> Main: Сохранить текущую ячейку для детального анализа
+  end
+end
+end
+
+group Шаг 3: Анализ числа геометрических примитивов
+loop Для каждой ячейки в крупной топологии
+  Main -> Main: Сравнить количество геометрических примитивов текущей и эталонной ячейки
+  alt Если различие количества примитивов незначительно
+    Main -> Main: Сохранить текущую ячейку для детального анализа
+  end
+end
+end
+
+group Шаг 4: Сравнение геометрических сигнатур полигонов
+Main -> GeometrySignature: Создать набор сигнатур для эталонной ячейки
+GeometrySignature --> Main: Вернуть набор сигнатур
+
+loop Для каждой ячейки в крупной топологии
+  Main -> GeometrySignature: Создать набор сигнатур текущей ячейки
+  GeometrySignature --> Main: Вернуть набор сигнатур текущей ячейки
+
+  loop Для каждой пары сигнатур (эталонная, текущая)
+    Main -> GeometrySignature: Выполнить поиск максимального совпадения сигнатур
+    GeometrySignature --> Main: Вернуть результат совпадения
+    Main -> Main: Подсчёт количества удовлетворительных совпадений
+  end
+
+  alt Если количество совпадений значительное (выше заданного порога)
+    Main -> Main: Сохранить текущую ячейку для детального анализа
+  end
+end
+end
+
+group Шаг 5: Анализ статистических характеристик
+Main -> GeometryCharacteristic: Создать статистический профиль эталонной ячейки
+GeometryCharacteristic --> Main: Вернуть профиль ячейки
+
+loop Для каждой ячейки в крупной топологии
+  Main -> GeometryCharacteristic: Создать статистический профиль текущей ячейки
+  GeometryCharacteristic --> Main: Вернуть профиль текущей ячейки
+
+  loop Для каждой пары статистических характеристик (эталонная, текущая)
+    Main -> GeometryCharacteristic: Проверить схожесть статистических характеристик
+    GeometryCharacteristic --> Main: Вернуть результат проверки (да/нет)
+    Main -> Main: Подсчёт количества удовлетворительных совпадений характеристик
+  end
+
+  alt Если количество совпадений значительное (выше заданного порога)
+    Main -> Main: Сохранить текущую ячейку для детального анализа
+  end
+end
+end
+
+group Шаг 6: Детальный побитовый анализ матриц геометрий
+Main -> Main: Определить слои для анализа эталонной ячейки
+
+loop Для каждого слоя эталонной ячейки
+  Main -> LayoutBitmapGenerator: Сгенерировать битовую матрицу эталонной ячейки на заданном слое
+  LayoutBitmapGenerator --> Main: Вернуть битовую матрицу
+end
+
+loop Для каждой ячейки, прошедшей предварительный отбор
+  Main -> Main: Инициализировать итоговый показатель схожести (TotalChance)
+
+  loop Для каждого слоя
+    Main -> LayoutBitmapGenerator: Сгенерировать битовую матрицу текущей ячейки на заданном слое
+    LayoutBitmapGenerator --> Main: Вернуть битовую матрицу текущей ячейки
+
+    Main -> Main: Сравнить битовую матрицу текущей и эталонной ячеек, вычислить вероятность совпадения
+    Main -> Main: Суммировать результаты по всем слоям
+  end
+
+  Main -> Main: Нормализовать суммарную вероятность по количеству слоёв
+  Main -> Main: Вывести итоговый показатель схожести текущей ячейки с эталонной
+end
+end
+
+@enduml

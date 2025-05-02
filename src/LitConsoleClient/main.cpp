@@ -60,8 +60,15 @@ main(int argc, char* argv[])
 
    try
    {
-      lds::LayoutData largeLayoutData = InGetLayoutData(L"/home/justfunde/Work/MIET/Layout-identification-tool/TestFiles/aes.gds");
-      lds::LayoutData cellData = InGetLayoutData(L"/home/justfunde/Work/MIET/Layout-identification-tool/TestFiles/sky130_fd_sc_hd_dfxtp_1.gds");
+      std::string largeLayoutPath = argv[1];
+
+      lds::LayoutData largeLayoutData = InGetLayoutData(std::wstring(largeLayoutPath.begin(), largeLayoutPath.end()));
+      std::cout << "Layout file name: " << std::string(largeLayoutData.fileName.begin(), largeLayoutData.fileName.end()) << std::endl;
+
+      std::string cellLayoutPath = argv[2];
+
+      lds::LayoutData cellData = InGetLayoutData(std::wstring(cellLayoutPath.begin(), cellLayoutPath.end()));
+      std::cout << "Cell file name: " << std::string(cellData.fileName.begin(), cellData.fileName.end()) << std::endl;
       std::set<const lds::Element*> elementsForDetailedAnalysis;
 
       const auto* cellElement = cellData.libraries[0]->elements[0];
@@ -92,10 +99,6 @@ main(int argc, char* argv[])
 
       for (const auto& currElement : layoutElementArr)
       {
-         if (std::set<std::string>({"sky130_fd_sc_hd__dfxtp_1", "sky130_fd_sc_hd__fill_1", "sky130_fd_sc_hd__dfxtp_1", "lut_s44"}).count(currElement->name))
-         {
-            int abc = 5;
-         }
          if (auto res = CalcSquareMatchPercentage(currElement, cellElement); res > 0.85)
          {
             resultSs << "Possible match (" << res * 100 << "%) '" << cellElement->name << "' with '" << currElement->name << "' in layout" << std::endl;
@@ -218,11 +221,14 @@ main(int argc, char* argv[])
       std::unordered_map<int64_t, LayoutBitmap> layerToMapBitmap;
       std::set<int64_t> cellLayers;
 
-      constexpr std::size_t bitmapSz = 64;
+      constexpr std::size_t bitmapSz = 128;
 
       for (const auto* it : cellElement->geometries)
       {
-         cellLayers.emplace(it->layer);
+         if (it->layer == 67)
+         {
+            cellLayers.emplace(it->layer);
+         }
       }
 
       for (const auto& it : cellLayers)
@@ -239,19 +245,6 @@ main(int argc, char* argv[])
          for (const auto& [layer, bitmap] : layerToMapBitmap)
          {
             LayoutBitmap currentElementBitmap = bitmapGenerator.Run(currentElement, bitmapSz, bitmapSz, {layer});
-            if (currentElement->name == "sky130_fd_sc_hd__dfxtp_1")
-            {
-               std::cout << "CellBitmap:\n";
-               // Print(bitmap);
-               //
-               // std::cout << "ElemBitmap:\n";
-               // Print(currentElementBitmap);
-               // std::cout << std::endl
-               //          << std::endl
-               //          << std::endl
-               //          << std::endl
-               //;//
-            }
 
             double currentChance = Compare(currentElementBitmap, bitmap);
             std::cout << "Compability chance on layer " << layer << ": " << currentChance * 100 << "\n";
@@ -260,10 +253,6 @@ main(int argc, char* argv[])
 
          std::cout << "Total chance: " << (totalChance / layerToMapBitmap.size()) * 100 << "\n--------------------------------------------------------------------\n";
       }
-
-      // auto bitmap = gen.Run(cellElement, 128, 128, {95});
-      // Print(bitmap);
-      // return 0;
    }
    catch (const std::exception& e)
    {

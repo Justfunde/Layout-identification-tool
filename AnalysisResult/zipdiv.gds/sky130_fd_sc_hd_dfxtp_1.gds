@@ -1,0 +1,89 @@
+Analyzing cell names with Livenshtein algorithm, n = 3
+Possible match 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_1' in layout
+Possible match 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_2' in layout
+Analyzing cell with calculation of relative deviation, > 85%
+Possible match (100%) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_1' in layout
+Analyzing cell with geometries count, < 10% difference
+Possible match (difference 0%) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_1' in layout
+Analyzing distribution of polygon points in cells
+Possible match (10 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_1' in layout
+Possible match (11 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__a22oi_4' in layout
+Possible match (9 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_2' in layout
+Possible match (9 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__o211ai_4' in layout
+Analyzing stat characteristics of geometries in cells
+Possible match (31 equal geometry characteristics) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_1' in layout
+Possible match (27 equal geometry characteristics) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_2' in layout
+----------------------DetailedAnalysis----------------------
+Analyzing sky130_fd_sc_hd__dfxtp_1...
+Compability chance on layer 95: 100
+Compability chance on layer 122: 100
+Compability chance on layer 83: 100
+Compability chance on layer 94: 100
+Compability chance on layer 81: 100
+Compability chance on layer 68: 100
+Compability chance on layer 236: 100
+Compability chance on layer 93: 100
+Compability chance on layer 67: 100
+Compability chance on layer 66: 100
+Compability chance on layer 78: 100
+Compability chance on layer 65: 100
+Compability chance on layer 64: 100
+Total chance: 100
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__a22oi_4...
+Compability chance on layer 95: 88.6475
+Compability chance on layer 122: 99.8779
+Compability chance on layer 83: 100
+Compability chance on layer 94: 87.5488
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 67.9688
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 58.667
+Compability chance on layer 66: 65.5029
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 76.3428
+Compability chance on layer 64: 99.8535
+Total chance: 87.3441
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__dfxtp_2...
+Compability chance on layer 95: 96.9482
+Compability chance on layer 122: 99.9268
+Compability chance on layer 83: 100
+Compability chance on layer 94: 98.2666
+Compability chance on layer 81: 100
+Compability chance on layer 68: 98.9502
+Compability chance on layer 236: 100
+Compability chance on layer 93: 100
+Compability chance on layer 67: 72.6562
+Compability chance on layer 66: 68.4814
+Compability chance on layer 78: 100
+Compability chance on layer 65: 95.5811
+Compability chance on layer 64: 99.9268
+Total chance: 94.6721
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__o211ai_4...
+Compability chance on layer 95: 88.6475
+Compability chance on layer 122: 99.8779
+Compability chance on layer 83: 100
+Compability chance on layer 94: 87.5488
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 65.2344
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 57.7393
+Compability chance on layer 66: 65.5273
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 76.7334
+Compability chance on layer 64: 99.8535
+Total chance: 87.0944
+--------------------------------------------------------------------
+
+================= Execution times =================
+1) Livenshtein matching:           0 ms
+2) Relative deviation (>85%):       0 ms
+3) Geometries count (<10% diff):   0 ms
+4) Polygon points distribution:    162 ms
+5) Stat characteristics:           0 ms
+6) Mask analysis:           107 ms
+==================================================

@@ -1,0 +1,362 @@
+Analyzing cell names with Livenshtein algorithm, n = 3
+Possible match 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfrtp_1' in layout
+Possible match 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfrtp_4' in layout
+Possible match 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfrtp_2' in layout
+Possible match 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_1' in layout
+Possible match 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_4' in layout
+Possible match 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfstp_1' in layout
+Possible match 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_2' in layout
+Possible match 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfstp_2' in layout
+Analyzing cell with calculation of relative deviation, > 85%
+Possible match (100%) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_1' in layout
+Analyzing cell with geometries count, < 10% difference
+Possible match (difference 0.653595%) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__o31a_4' in layout
+Possible match (difference 0.649351%) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__nand3_4' in layout
+Possible match (difference 0%) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_1' in layout
+Possible match (difference 0.653595%) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__a311o_4' in layout
+Analyzing distribution of polygon points in cells
+Possible match (11 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__xnor2_4' in layout
+Possible match (11 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__xor2_4' in layout
+Possible match (7 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__nor2_4' in layout
+Possible match (7 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__nor2_8' in layout
+Possible match (11 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__nor3_4' in layout
+Possible match (12 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__nor4b_4' in layout
+Possible match (10 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_1' in layout
+Possible match (10 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_4' in layout
+Possible match (9 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_2' in layout
+Possible match (11 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__a22oi_4' in layout
+Possible match (11 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__nor4_4' in layout
+Possible match (9 equal signatures) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__o211ai_4' in layout
+Analyzing stat characteristics of geometries in cells
+Possible match (31 equal geometry characteristics) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_1' in layout
+Possible match (27 equal geometry characteristics) 'sky130_fd_sc_hd__dfxtp_1' with 'sky130_fd_sc_hd__dfxtp_2' in layout
+----------------------DetailedAnalysis----------------------
+Analyzing sky130_fd_sc_hd__dfrtp_1...
+Compability chance on layer 95: 92.0898
+Compability chance on layer 122: 99.8779
+Compability chance on layer 83: 100
+Compability chance on layer 94: 95.7764
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 65.1367
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 56.7627
+Compability chance on layer 66: 65.9424
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 88.5498
+Compability chance on layer 64: 99.8535
+Total chance: 88.8503
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__xnor2_4...
+Compability chance on layer 95: 88.6475
+Compability chance on layer 122: 99.8779
+Compability chance on layer 83: 100
+Compability chance on layer 94: 87.5488
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 69.2383
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 57.6416
+Compability chance on layer 66: 63.208
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 77.3926
+Compability chance on layer 64: 99.8535
+Total chance: 87.2671
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__xor2_4...
+Compability chance on layer 95: 88.6475
+Compability chance on layer 122: 99.8779
+Compability chance on layer 83: 100
+Compability chance on layer 94: 87.5488
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 67.9199
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 57.9102
+Compability chance on layer 66: 67.4316
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 76.4893
+Compability chance on layer 64: 99.8535
+Total chance: 87.4418
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__dfrtp_4...
+Compability chance on layer 95: 90.1123
+Compability chance on layer 122: 99.7803
+Compability chance on layer 83: 100
+Compability chance on layer 94: 96.2646
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 66.1865
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 57.9346
+Compability chance on layer 66: 69.5801
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 89.7949
+Compability chance on layer 64: 99.7559
+Total chance: 89.2672
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__dfrtp_2...
+Compability chance on layer 95: 92.0166
+Compability chance on layer 122: 99.8779
+Compability chance on layer 83: 100
+Compability chance on layer 94: 96.0938
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 65.6494
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 60.6201
+Compability chance on layer 66: 69.3359
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 90.0635
+Compability chance on layer 64: 99.8535
+Total chance: 89.5827
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__o31a_4...
+Compability chance on layer 95: 88.6475
+Compability chance on layer 122: 99.9023
+Compability chance on layer 83: 100
+Compability chance on layer 94: 87.5488
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 66.8457
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 56.2744
+Compability chance on layer 66: 59.6436
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 75.8789
+Compability chance on layer 64: 99.8779
+Total chance: 86.591
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__nor2_4...
+Compability chance on layer 95: 88.3057
+Compability chance on layer 122: 99.6338
+Compability chance on layer 83: 100
+Compability chance on layer 94: 86.4258
+Compability chance on layer 81: 94.4336
+Compability chance on layer 68: 68.2617
+Compability chance on layer 236: 94.4336
+Compability chance on layer 93: 97.3389
+Compability chance on layer 67: 61.2061
+Compability chance on layer 66: 63.5986
+Compability chance on layer 78: 97.0947
+Compability chance on layer 65: 74.2676
+Compability chance on layer 64: 99.6094
+Total chance: 86.5084
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__nor2_8...
+Compability chance on layer 95: 88.6475
+Compability chance on layer 122: 99.9023
+Compability chance on layer 83: 100
+Compability chance on layer 94: 87.5488
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 68.1152
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 61.8164
+Compability chance on layer 66: 63.6475
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 77.5391
+Compability chance on layer 64: 99.8779
+Total chance: 87.5507
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__nor3_4...
+Compability chance on layer 95: 88.6475
+Compability chance on layer 122: 99.8047
+Compability chance on layer 83: 100
+Compability chance on layer 94: 87.5488
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 66.0156
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 58.9844
+Compability chance on layer 66: 63.9404
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 74.3896
+Compability chance on layer 64: 99.7803
+Total chance: 86.9366
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__nand3_4...
+Compability chance on layer 95: 88.6475
+Compability chance on layer 122: 99.8779
+Compability chance on layer 83: 100
+Compability chance on layer 94: 87.5488
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 67.9688
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 57.9834
+Compability chance on layer 66: 68.1641
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 75.2197
+Compability chance on layer 64: 99.8535
+Total chance: 87.4099
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__nor4b_4...
+Compability chance on layer 95: 88.6475
+Compability chance on layer 122: 99.8779
+Compability chance on layer 83: 100
+Compability chance on layer 94: 87.5488
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 67.9688
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 56.7871
+Compability chance on layer 66: 60.5713
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 75.415
+Compability chance on layer 64: 99.8535
+Total chance: 86.7488
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__dfxtp_1...
+Compability chance on layer 95: 100
+Compability chance on layer 122: 100
+Compability chance on layer 83: 100
+Compability chance on layer 94: 100
+Compability chance on layer 81: 100
+Compability chance on layer 68: 100
+Compability chance on layer 236: 100
+Compability chance on layer 93: 100
+Compability chance on layer 67: 100
+Compability chance on layer 66: 100
+Compability chance on layer 78: 100
+Compability chance on layer 65: 100
+Compability chance on layer 64: 100
+Total chance: 100
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__dfxtp_4...
+Compability chance on layer 95: 92.4561
+Compability chance on layer 122: 99.8779
+Compability chance on layer 83: 100
+Compability chance on layer 94: 95.6543
+Compability chance on layer 81: 98.5107
+Compability chance on layer 68: 80.8838
+Compability chance on layer 236: 98.5107
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 65.8936
+Compability chance on layer 66: 68.6279
+Compability chance on layer 78: 100
+Compability chance on layer 65: 87.3535
+Compability chance on layer 64: 99.9268
+Total chance: 91.2466
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__dfstp_1...
+Compability chance on layer 95: 92.2852
+Compability chance on layer 122: 99.9268
+Compability chance on layer 83: 100
+Compability chance on layer 94: 95.7764
+Compability chance on layer 81: 100
+Compability chance on layer 68: 92.2119
+Compability chance on layer 236: 100
+Compability chance on layer 93: 100
+Compability chance on layer 67: 68.9697
+Compability chance on layer 66: 63.0371
+Compability chance on layer 78: 100
+Compability chance on layer 65: 89.8438
+Compability chance on layer 64: 99.9268
+Total chance: 92.4598
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__dfxtp_2...
+Compability chance on layer 95: 96.9482
+Compability chance on layer 122: 99.9268
+Compability chance on layer 83: 100
+Compability chance on layer 94: 98.2666
+Compability chance on layer 81: 100
+Compability chance on layer 68: 98.9502
+Compability chance on layer 236: 100
+Compability chance on layer 93: 100
+Compability chance on layer 67: 72.6562
+Compability chance on layer 66: 68.4814
+Compability chance on layer 78: 100
+Compability chance on layer 65: 95.5811
+Compability chance on layer 64: 99.9268
+Total chance: 94.6721
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__dfstp_2...
+Compability chance on layer 95: 92.2363
+Compability chance on layer 122: 99.9268
+Compability chance on layer 83: 100
+Compability chance on layer 94: 96.0693
+Compability chance on layer 81: 100
+Compability chance on layer 68: 92.3584
+Compability chance on layer 236: 100
+Compability chance on layer 93: 100
+Compability chance on layer 67: 64.8682
+Compability chance on layer 66: 63.0615
+Compability chance on layer 78: 100
+Compability chance on layer 65: 90.7227
+Compability chance on layer 64: 99.9268
+Total chance: 92.2438
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__a311o_4...
+Compability chance on layer 95: 88.6475
+Compability chance on layer 122: 99.9023
+Compability chance on layer 83: 100
+Compability chance on layer 94: 87.5488
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 68.1152
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 61.4746
+Compability chance on layer 66: 68.6768
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 76.8799
+Compability chance on layer 64: 99.8779
+Total chance: 87.8606
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__a22oi_4...
+Compability chance on layer 95: 88.6475
+Compability chance on layer 122: 99.8779
+Compability chance on layer 83: 100
+Compability chance on layer 94: 87.5488
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 67.9688
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 58.667
+Compability chance on layer 66: 65.5029
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 76.3428
+Compability chance on layer 64: 99.8535
+Total chance: 87.3441
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__nor4_4...
+Compability chance on layer 95: 88.6475
+Compability chance on layer 122: 99.8779
+Compability chance on layer 83: 100
+Compability chance on layer 94: 87.5488
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 67.9688
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 60.0098
+Compability chance on layer 66: 65.1123
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 76.2451
+Compability chance on layer 64: 99.8535
+Total chance: 87.4099
+--------------------------------------------------------------------
+Analyzing sky130_fd_sc_hd__o211ai_4...
+Compability chance on layer 95: 88.6475
+Compability chance on layer 122: 99.8779
+Compability chance on layer 83: 100
+Compability chance on layer 94: 87.5488
+Compability chance on layer 81: 97.0215
+Compability chance on layer 68: 65.2344
+Compability chance on layer 236: 97.0215
+Compability chance on layer 93: 98.5107
+Compability chance on layer 67: 57.7393
+Compability chance on layer 66: 65.5273
+Compability chance on layer 78: 98.5107
+Compability chance on layer 65: 76.7334
+Compability chance on layer 64: 99.8535
+Total chance: 87.0944
+--------------------------------------------------------------------
+
+================= Execution times =================
+1) Livenshtein matching:           0 ms
+2) Relative deviation (>85%):       0 ms
+3) Geometries count (<10% diff):   0 ms
+4) Polygon points distribution:    502 ms
+5) Stat characteristics:           8 ms
+6) Mask analysis:           493 ms
+==================================================
